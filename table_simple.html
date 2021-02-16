@@ -1,45 +1,45 @@
-<!DOCTYPE html>  
-<html>  
-	<head>
-	    	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-	    	<meta content="utf-8" http-equiv="encoding">
-		<style>
+<!DOCTYPE html>
+<html>
+    <head>
+            <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+            <meta content="utf-8" http-equiv="encoding">
+        <style>
 
 td {
-	border: 1px solid black;
+    border: 1px solid black;
 }
 
-		</style>  
-	</head>
-	<body>
-		<div id = "tableDiv"></div>
-		<script>
+        </style>
+    </head>
+    <body>
+        <div id = "tableDiv"></div>
+        <script>
 
 function renderTable(headers,content,columnCount){
-	var tableDiv;
-	var tableMain;
-	var tableBody;
+    var tableDiv;
+    var tableMain;
+    var tableBody;
     var tableRow;
     var tableHeader;
     var tableCell;
     var textNode;
     // create the table
-	tableDiv = document.getElementById('tableDiv');
-	tableMain = document.createElement('table');
-	tableDiv.appendChild(tableMain);
-	tableBody = document.createElement('tbody');
-	tableMain.appendChild(tableBody);
+    tableDiv = document.getElementById('tableDiv');
+    tableMain = document.createElement('table');
+    tableDiv.appendChild(tableMain);
+    tableBody = document.createElement('tbody');
+    tableMain.appendChild(tableBody);
     // create table headers
     tableRow = document.createElement('tr');
     for (columnLoop = 0; columnLoop < columnCount; columnLoop++){
-	    tableHeader = document.createElement('th');
+        tableHeader = document.createElement('th');
         textNode = document.createTextNode(headers[columnLoop]);
         tableHeader.appendChild(textNode);
         tableRow.appendChild(tableHeader)
     }
     tableBody.appendChild(tableRow);
     // create table cells
-    content.forEach(function(cells){ 
+    content.forEach(function(cells){
         tableRow = document.createElement('tr');
         for (columnLoop = 0; columnLoop < columnCount; columnLoop++){
             tableCell = document.createElement('td');
@@ -62,7 +62,7 @@ var content = [
 ];
 renderTable(headers,content,columnCount);
 
-			</script>
-		</div>
-	</body>  
-</html> 
+            </script>
+        </div>
+    </body>
+</html>
