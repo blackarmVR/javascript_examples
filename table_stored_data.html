@@ -55,7 +55,8 @@ function renderTable(headers,content,columnCount){
             tableRow.appendChild(tableCell);
             // add event listener
             tableCell.id = tableId;
-            //document.getElementById(tableId).addEventListener(“click”, showData, false);
+            console.log(document.getElementById(tableId))
+            //document.getElementById(tableId).addEventListener(“click”, showData);
         }
     })
 }
