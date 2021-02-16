@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+        <meta content="utf-8" http-equiv="encoding">
+    </head>
+    <body>
+        <div id="main"></div>
+        <script>
+            // function that retrieves data from element
+            function showData(event){
+                var roomName;
+                var htmlElement;
+                htmlElement = document.getElementById(event.toElement.id);
+                console.log(htmlElement.dataset.food);
+            }
+            // create paragraph element
+            var productHtml = document.createElement('span');
+            productHtml.innerHTML = "hello world";
+            productHtml.id = "testing";
+            productHtml.dataset.food = "apple"
+            // add paragraph to div
+            document.getElementById("main").appendChild(productHtml);
+            // add onclick function to retrieve data
+            document.getElementById("testing").addEventListener("click", showData, false);
+        </script>
+    </body>
+</html>
