@@ -24,6 +24,7 @@ function renderTable(headers,content,columnCount){
     var tableHeader;
     var tableCell;
     var textNode;
+    var tableId;
     // create the table
     tableDiv = document.getElementById('tableDiv');
     tableMain = document.createElement('table');
@@ -42,16 +43,20 @@ function renderTable(headers,content,columnCount){
     // create table cells
     content.forEach(function(cells){
         tableRow = document.createElement('tr');
+        tableBody.appendChild(tableRow);
         for (columnLoop = 0; columnLoop < columnCount; columnLoop++){
+            tableId = cells[0] + "_" + cells[1];
+            tableId = tableId.replace(/\s/g, '');
             tableCell = document.createElement('td');
             tableCell.dataset.product = cells[0];
             tableCell.dataset.count = cells[1];
             textNode = document.createTextNode(cells[columnLoop]);
-            textNode.onClick = function(){showData};
             tableCell.appendChild(textNode);
-            tableRow.appendChild(tableCell)
+            tableRow.appendChild(tableCell);
+            // add event listener
+            tableCell.id = tableId;
+            //document.getElementById(tableId).addEventListener(“click”, showData, false);
         }
-        tableBody.appendChild(tableRow);
     })
 }
 
