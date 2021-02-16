@@ -55,14 +55,14 @@ function renderTable(headers,content,columnCount){
             tableRow.appendChild(tableCell);
             // add event listener
             tableCell.id = tableId;
-            console.log(document.getElementById(tableId))
-            //document.getElementById(tableId).addEventListener(“click”, showData);
+            document.getElementById(tableId).addEventListener("click", showData);
         }
     })
 }
 
 function showData(event){
-    console.log("test")
+    var product;
+    var count;
     var htmlElement;
     htmlElement = document.getElementById(event.toElement.id);
     product = htmlElement.dataset.product;
