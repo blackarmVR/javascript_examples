@@ -1,0 +1,68 @@
+<!DOCTYPE html>  
+<html>  
+	<head>
+	    	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	    	<meta content="utf-8" http-equiv="encoding">
+		<style>
+
+td {
+	border: 1px solid black;
+}
+
+		</style>  
+	</head>
+	<body>
+		<div id = "tableDiv"></div>
+		<script>
+
+function renderTable(headers,content,columnCount){
+	var tableDiv;
+	var tableMain;
+	var tableBody;
+    var tableRow;
+    var tableHeader;
+    var tableCell;
+    var textNode;
+    // create the table
+	tableDiv = document.getElementById('tableDiv');
+	tableMain = document.createElement('table');
+	tableDiv.appendChild(tableMain);
+	tableBody = document.createElement('tbody');
+	tableMain.appendChild(tableBody);
+    // create table headers
+    tableRow = document.createElement('tr');
+    for (columnLoop = 0; columnLoop < columnCount; columnLoop++){
+	    tableHeader = document.createElement('th');
+        textNode = document.createTextNode(headers[columnLoop]);
+        tableHeader.appendChild(textNode);
+        tableRow.appendChild(tableHeader)
+    }
+    tableBody.appendChild(tableRow);
+    // create table cells
+    content.forEach(function(cells){ 
+        tableRow = document.createElement('tr');
+        for (columnLoop = 0; columnLoop < columnCount; columnLoop++){
+            tableCell = document.createElement('td');
+            textNode = document.createTextNode(cells[columnLoop]);
+            tableCell.appendChild(textNode);
+            tableRow.appendChild(tableCell)
+        }
+        tableBody.appendChild(tableRow);
+    })
+
+}
+
+var columnCount = 2;
+var headers = ["Product","Count"];
+var content = [
+    ["alpha",1],
+    ["bravo",2],
+    ["charlie",3],
+    ["delta",4]
+];
+renderTable(headers,content,columnCount);
+
+			</script>
+		</div>
+	</body>  
+</html> 
