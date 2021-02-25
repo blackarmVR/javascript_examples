@@ -1,0 +1,31 @@
+<html>
+	<head>
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
+		<!--
+		<script src="https://d3js.org/d3.v4.js"></script>
+		 -->
+		<style>
+		
+		</style>
+	</head>
+	<body>
+		<div>
+            <select id="overlay">
+            </select>
+	 	</div>
+		<script>
+    var optionList = [];
+    var selectElement = document.getElementById('overlay');
+    var optionElement;
+    optionList.push({"name": "adam", "sys_id" : "alpha"});
+    optionList.push({"name": "ben", "sys_id" : "bravo"});
+    optionList.forEach(function(option){
+      optionElement = document.createElement('option');
+      optionElement.text = option["name"];
+      optionElement.value = option["sys_id"];
+      selectElement.add(optionElement);
+    });
+		</script>
+	</body>
+</html>
