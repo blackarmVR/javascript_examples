@@ -15,6 +15,17 @@
             </select>
 	 	</div>
 		<script>
+
+
+    function dropdownChange(){
+        var dropdownElement;
+        var dropdownValue;
+        dropdownElement = document.getElementById("overlay");
+        dropdownValue = dropdownElement.value;
+        console.log(dropdownValue)
+    }
+
+
     var optionList = [];
     var selectElement = document.getElementById('overlay');
     var optionElement;
@@ -26,6 +37,9 @@
       optionElement.value = option["sys_id"];
       selectElement.add(optionElement);
     });
+    document.getElementById("overlay").addEventListener("change", dropdownChange, null);
+
+    
 		</script>
 	</body>
 </html>
