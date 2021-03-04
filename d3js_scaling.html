@@ -1,0 +1,46 @@
+<html>
+	<head>
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
+		<script src="https://d3js.org/d3.v5.min.js"></script>
+		<style>
+
+		</style>
+	</head>
+	<body>
+        <svg id="svgCanvas"></svg>
+		<script>
+
+			redraw();
+			window.addEventListener("resize", redraw);
+			 
+			function redraw(){
+				// get the current dimensions of the window and pass to the function that draws content
+                var pagewidth = window.innerWidth;
+				grid(pagewidth);
+			}
+			 
+			function grid(pagewidth){
+				var x1,y1,x2,y2;
+				// select the svg canvas
+				var svg = d3.select("#svgCanvas");
+				// resize to match page
+				svg.attr("width", pagewidth).attr("height", pagewidth);
+				// delete any previous content
+				svg.selectAll("*").remove();
+				svg.append("circle")
+					.attr("cx", pagewidth * 0.38)
+					.attr("cy", pagewidth * 0.38)
+					.attr("r", pagewidth * 0.05)
+					.attr("fill", "blue");
+				svg.append("text")
+					.attr("x", pagewidth * 0.03)
+					.attr("y", pagewidth * 0.06)
+					.style("text-anchor", "start")
+					.style("font-size", pagewidth * 0.02)
+					.text("pagewidth = "+pagewidth);
+			}
+
+		</script>
+	</body>
+</html>
