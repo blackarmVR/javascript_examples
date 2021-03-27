@@ -1,0 +1,453 @@
+<html>
+<head>
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<meta content="utf-8" http-equiv="encoding">
+	<script src="https://d3js.org/d3.v4.js"></script>	
+</head>
+<body>
+	<div id="svg"></div>
+	<script>
+	var url_string = window.location;
+	var url = new URL(url_string);
+	var scale = url.searchParams.get("scale");
+	if ( scale == null ){
+		scale = 1.0;
+	}
+	// create the svg canvas	
+	canvas(scale,1140,750);
+	text(scale,32,84,70,"start","Title");
+	text(scale,54,124,25,"start","sub title");
+	text(scale,127,190,18,"start","blah blah blah");
+	pc();
+	bottomleft(scale);
+
+	// donuts
+	var donutdata1 = [];
+	var donutdata2 = [];
+	var donutdata3 = [];
+	for (var donutloop=0; donutloop<6; donutloop++){
+		donutdata1.push(Math.random()+1); 
+		donutdata2.push(Math.random()+1); 
+		donutdata3.push(Math.random()+1);
+	}
+	var donutscore1 = Math.floor(Math.random()*300);
+	var donutscore2 = Math.floor(Math.random()*300);
+	var donutscore3 = Math.floor(Math.random()*300);
+	donut(scale,165,466,78,"#39992a","N3",donutscore1,donutdata1);
+	donut(scale,165,466,254,"#39992a","N3",donutscore2,donutdata2);
+	donut(scale,165,466,448,"#39992a","N3",donutscore3,donutdata3);
+	donut(scale,80,466,650,"#39992a","N3",donutscore3,donutdata3);
+	
+	// make jagged data
+	var jagged1 = [];
+	var jagged2 = [];
+	for ( var loop1=0; loop1<4; loop1++ ){
+		jagged1.push((Math.random() * 6)+2);
+		jagged2.push((Math.random() * 6)+2);
+	}
+	jaggedgraph(scale,64,416,jagged1,jagged2);
+	
+	// make wiggle data
+	var wiggle1 = [];
+	var wiggle2 = [];
+	var wiggle3 = [];
+	for ( var loop1=0; loop1<30; loop1++ ){
+		wiggle1.push((Math.random() * 6)+2);
+		wiggle2.push((Math.random() * 6)+2);
+		wiggle3.push((Math.random() * 6)+2);
+	}
+	wigglegraph(scale,770,585,wiggle1);
+	wigglegraph(scale,770,391,wiggle2);
+	wigglegraph(scale,770,214,wiggle3);
+	
+	function canvas(scale,canvasWidth,canvasHeight){
+		// create the canvas
+		d3.select("#svg")
+			.append("svg")
+			.attr("id", "daneel")
+			.attr("width", canvasWidth*scale)
+			.attr("height", canvasHeight*scale);
+		d3.select("#daneel")
+			.append("rect")
+			.attr("x", 0)
+			.attr("y", 0)
+			.attr("width", canvasWidth*scale)
+			.attr("height", canvasHeight*scale)
+			.attr("fill", "#eeeeee")
+			.style("opacity", 1.0);
+	}
+		
+	function text(scale,x,y,fontSize,anchor,message){
+		d3.select("#daneel")
+			.append("text")
+			.attr("x", x*scale)
+			.attr("y", y*scale)
+			.style("fill", "black")
+			.style("font-size", fontSize*scale)
+			.style("text-anchor", anchor)
+			.text(message);
+	}
+	
+	function wigglegraph(scale,x,y,meh){
+		var chartx = x*scale;
+		var charty;
+		var points = [];
+		// prepare points for chart
+		for ( var pointloop in meh){
+			charty=(y-(meh[pointloop]*12))*scale;
+			points.push([chartx,charty]);
+			chartx=chartx+(8.5*scale);
+		}
+		//
+		svg = d3.select("#daneel");
+		var xloop,yloop;
+		svg.append("line")
+			.attr("x1", (x-5)*scale)
+			.attr("y1", y*scale)
+			.attr("x2", (x+254)*scale)
+			.attr("y2", y*scale)
+			.attr("stroke-width", 1)
+			.attr("stroke", "#d5d5d5");
+		for ( xloop=0; xloop<14; xloop++){
+			svg.append("line")
+				.attr("x1", (x+xloop*19)*scale)
+				.attr("y1", (y+5)*scale)
+				.attr("x2", (x+xloop*19)*scale)
+				.attr("y2", y*scale)
+				.attr("stroke-width", 1)
+				.attr("stroke", "#dddddd");
+			svg.append("line")
+				.attr("x1", (x+xloop*19)*scale)
+				.attr("y1", y*scale)
+				.attr("x2", (x+xloop*19)*scale)
+				.attr("y2", (y-114)*scale)
+				.attr("stroke-width", 1)
+				.attr("stroke", "#dddddd");
+			svg.append("text")
+				.attr("x", (x+xloop*19)*scale)
+				.attr("y", (y+12)*scale)
+				.style("fill", "#888888")
+				.style("font-size", 7*scale)
+				.style("text-anchor", "middle")
+				.text(1+xloop*2);
+		}
+		for ( yloop=0; yloop<5; yloop++){
+			svg.append("line")
+				.attr("x1", x*scale)
+				.attr("y1", (y-yloop*26)*scale)
+				.attr("x2", (x+254)*scale)
+				.attr("y2", (y-yloop*26)*scale)
+				.attr("stroke-width", 1)
+				.attr("stroke", "#dddddd");
+			svg.append("text")
+				.attr("x", (x-14)*scale)
+				.attr("y", (y-yloop*26)*scale)
+				.style("fill", "#888888")
+				.style("font-size", 7*scale)
+				.style("text-anchor", "middle")
+				.text(yloop*2);
+		}
+		var lineGenerator = d3.line()
+			.curve(d3.curveCardinal);
+		var pathData = lineGenerator(points);
+		d3.select("#daneel")
+			.append("path")
+			.attr('d', pathData)
+			.attr("stroke", "#4fd2dd")
+			.attr("stroke-width", 1)
+			.attr("fill", "none");
+	}
+	
+	function jaggedgraph(scale,x,y,jagged1,jagged2){
+		var chartx,charty;
+		var pathData;
+		var points1 = [];
+		var points2 = [];
+		// prepare points for chart
+		chartx = x*scale;
+		for ( var pointloop1 in jagged1){
+			charty=(y-(jagged1[pointloop1]*7))*scale;
+			points1.push([chartx,charty]);
+			chartx=chartx+(57*scale);
+		}
+		chartx = x*scale;
+		for ( var pointloop2 in jagged2){
+			charty=(y-(jagged2[pointloop2]*7))*scale;
+			points2.push([chartx,charty]);
+			chartx=chartx+(57*scale);
+		}
+		
+		svg = d3.select("#daneel");
+		var xloop,yloop;
+		for ( xloop=0; xloop<4; xloop++){
+			svg.append("line")
+				.attr("x1", (x+xloop*57)*scale)
+				.attr("y1", (y+10)*scale)
+				.attr("x2", (x+xloop*57)*scale)
+				.attr("y2", (y-135)*scale)
+				.attr("stroke-width", 1)
+				.attr("stroke", "#dddddd");
+			svg.append("text")
+				.attr("x", (x+xloop*57)*scale)
+				.attr("y", (y+19)*scale)
+				.style("fill", "black")
+				.style("font-size", 10*scale)
+				.style("text-anchor", "middle")
+				.text(xloop+1);
+		}
+		for ( yloop=0; yloop<3; yloop++){
+			svg.append("line")
+				.attr("x1", (x-13)*scale)
+				.attr("y1", (y-yloop*52)*scale)
+				.attr("x2", (x+182)*scale)
+				.attr("y2", (y-yloop*52)*scale)
+				.attr("stroke-width", 1*scale)
+				.attr("stroke", "#dddddd");
+			svg.append("text")
+				.attr("x", (x-20)*scale)
+				.attr("y", (y-yloop*52+4)*scale)
+				.style("fill", "black")
+				.style("font-size", 10*scale)
+				.style("text-anchor", "middle")
+				.text(5+yloop*5);
+		}
+		lineGenerator = d3.line();
+		//var points = [
+		//	[x, y-52],
+		//	[x+57, y-104],
+		//	[x+114, y-85],
+		//	[x+171, y-126]
+		//];
+		pathData = lineGenerator(points1);
+		d3.select("#daneel")
+			.append("path")
+			.attr('d', pathData)
+			.attr("stroke", "#2177b4")
+			.attr("stroke-width", 1)
+			.attr("fill", "none");
+		pathData = lineGenerator(points2);
+		d3.select("#daneel")
+			.append("path")
+			.attr('d', pathData)
+			.attr("stroke", "#ff7f0c")
+			.attr("stroke-width", 1)
+			.attr("fill", "none");	
+		// little things in the top right
+		line(scale,x+189,y-114,x+209,y-114,1,"#ff7f0c");
+		line(scale,x+189,y-126,x+209,y-126,1,"#2177b4");
+		ellipse(scale,x+199,y-114,2,2,"#ff7f0c",0,"");
+		ellipse(scale,x+199,y-126,2,2,"#2177b4",0,"");
+		svg.append("text")
+			.attr("x", (x+212)*scale)
+			.attr("y", (y-110)*scale)
+			.style("fill", "black")
+			.style("font-size", 10*scale)
+			.style("text-anchor", "start")
+			.text("trace 1");	
+		svg.append("text")
+			.attr("x", (x+212)*scale)
+			.attr("y", (y-122)*scale)
+			.style("fill", "black")
+			.style("font-size", 10*scale)
+			.style("text-anchor", "start")
+			.text("trace 0");
+	}
+
+	function line(scale,x1,y1,x2,y2,stroke,color){
+		svg = d3.select("#daneel");
+		svg.append("line")
+			.attr("x1", x1*scale)
+			.attr("y1", y1*scale)
+			.attr("x2", x2*scale)
+			.attr("y2", y2*scale)
+			.attr("stroke-width", stroke*scale)
+			.attr("stroke", color);
+	}
+	
+	function pc(){
+		polygon(scale,"#413d80",2,"black",[{"x":84,"y":141},{"x":108,"y":155},{"x":72,"y":175},{"x":46,"y":161}]);
+		polygon(scale,"#4e4999",2,"black",[{"x":72,"y":175},{"x":46,"y":161},{"x":46,"y":220},{"x":72,"y":236}]);
+		polygon(scale,"#343166",2,"black",[{"x":72,"y":175},{"x":72,"y":236},{"x":108,"y":214},{"x":108,"y":155}]);
+		ellipse(scale,53,204,2.5,3,"#71fb69")
+		ellipse(scale,53,213,2.5,3,"#71fb69")
+	}
+	
+	function polygon(scale,fill,strokewidth,strokefill,points){
+		svg = d3.select("#daneel");
+		svg.append("polygon")
+			.data([points])
+			.attr("points",function(d) { 
+        return d.map(function(d) {
+            return [(scale*d.x),(scale*d.y)].join(",");
+        }).join(" ");
+    	})
+			.style("fill", fill)
+			.style("stroke", strokefill)
+			.style("stroke-width", strokewidth*scale)
+			.style("stroke-linejoin", "round");
+	}
+
+	function ellipse(scale,cx,cy,rx,ry,fill,strokewidth,strokefill){
+		svg = d3.select("#daneel");
+		svg.append("ellipse")
+			.attr("cx", cx*scale)
+			.attr("cy", cy*scale)
+			.attr("rx", rx*scale)
+			.attr("ry", ry*scale)
+			.attr("fill", fill)
+			.style("stroke", strokefill)
+			.style("strokeWidth", strokewidth);
+	}
+
+	function bottomleft(scale){
+		svg = d3.select("#daneel");
+		svg.append("circle")
+			.attr("cx", 48*scale)
+			.attr("cy", 695*scale)
+			.attr("r", 25*scale)
+			.attr("fill", "black");
+		svg.append("circle")
+			.attr("cx", 48*scale)
+			.attr("cy", 695*scale)
+			.attr("r", 20*scale)
+			.attr("fill", "white");
+		svg.append("text")
+			.attr("x", 48*scale)
+			.attr("y", 710*scale)
+			.style("fill", "black")
+			.style("font-size", 45*scale)
+			.style("text-anchor", "middle")
+			.text("i");
+/*
+		svg.append("text")
+			.attr("x", 89*scale)
+			.attr("y", 690*scale)
+			.style("fill", "black")
+			.style("font-size", 25*scale)
+			.style("text-anchor", "start")
+			.text("TTL Calculation Details &");
+		svg.append("text")
+			.attr("x", 97*scale)
+			.attr("y", 716*scale)
+			.style("fill", "black")
+			.style("font-size", 25*scale)
+			.style("text-anchor", "start")
+			.text("Data Confidence Metric");
+*/
+		svg.append("text")
+			.attr("x", 89*scale)
+			.attr("y", 690*scale)
+			.style("fill", "black")
+			.style("font-size", 25*scale)
+			.style("text-anchor", "start")
+			.text("blah blah blah blah blah");
+		svg.append("text")
+			.attr("x", 97*scale)
+			.attr("y", 716*scale)
+			.style("fill", "black")
+			.style("font-size", 25*scale)
+			.style("text-anchor", "start")
+			.text("blah blah blah blah blah");
+	}
+	
+	
+	function rect(x,y,width,height,color){
+		d3.select("#daneel")
+			.append("rect")
+			.attr("x", x)
+			.attr("y", y)
+			.attr("width", width)
+			.attr("height", height)
+			.attr("fill", color);
+	}
+		
+
+	function donut(scale,size,x,y,status,dc,score,donutdata){
+		var statusOuter = size*0.5;
+		var statusInner = size*0.45;
+		var donutOuter = size*0.4;
+		var donutInner = size*0.25;
+		var startangle = 0;
+		var endangle;
+		var total = 0;
+		var fill;
+		
+		svg = d3.select("#daneel");
+		// border
+		svg.append("circle")
+			.attr("cx", (x+size/2)*scale)
+			.attr("cy", (y+size/2)*scale)
+			.attr("r", statusOuter*scale)
+			.attr("fill", status);
+		svg.append("circle")
+			.attr("cx", (x+size/2)*scale)
+			.attr("cy", (y+size/2)*scale)
+			.attr("r", statusInner*scale)
+			.attr("fill", "white");
+		// calculate total
+		for ( var totalloop in donutdata ){
+			total = total + donutdata[totalloop];
+		}
+		
+		// draw the donut
+		for ( var arcloop in donutdata){
+			if ( arcloop == 0 ){
+				fill="#84caff"
+			}
+			if ( arcloop == 1 ){
+				fill="#7e0021"
+			}
+			if ( arcloop == 2 ){
+				fill="#579d1c"
+			}
+			if ( arcloop == 3 ){
+				fill="#ffd31f"
+			}
+			if ( arcloop == 4 ){
+				fill="#fe420c"
+			}
+			if ( arcloop == 5 ){
+				fill="#024586"
+			}
+			endangle = startangle+donutdata[arcloop]/total*Math.PI*2;
+			arc = d3.arc()
+				.innerRadius(donutInner*scale)
+				.outerRadius(donutOuter*scale)
+				.startAngle(startangle)
+				.endAngle(endangle);
+			trans="translate("+((x+size/2)*scale)+","+((y+size/2)*scale)+")";
+			svg.append("path")
+				.attr("d", arc)
+				.attr("transform", trans)
+				.attr("fill", fill);
+			startangle = endangle;
+		}
+		// center score
+		svg.append("text")
+			.attr("x", (x+(size*0.5))*scale)
+			.attr("y", (y+(size*0.54))*scale)
+			.style("font-size", size*0.14*scale)
+			.style("font-weight", 500)
+			.style("text-anchor", "middle")
+			.attr("font-family", "sans-serif")
+			.attr("fill", "black")
+			.text(score);
+		// side circle
+		svg.append("circle")
+			.attr("cx", (x-(size*0.23))*scale)
+			.attr("cy", (y+(size*0.67))*scale)
+			.attr("r", 8*scale)
+			.attr("fill", "green");
+		svg.append("text")
+			.attr("x", (x-(size*0.32))*scale)
+			.attr("y", (y+(size*0.54))*scale)
+			.style("font-size", size*0.15*scale)
+			.style("font-weight", 500)
+			.style("text-anchor", "start")
+			.attr("font-family", "sans-serif")
+			.attr("fill", "black")
+			.text(dc);
+	}
+	</script>
+</body>
+</html>

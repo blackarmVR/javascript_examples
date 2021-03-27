@@ -1,0 +1,1 @@
+sed -i '/ts-ignore/d' ./file.js

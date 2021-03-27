@@ -1,0 +1,24 @@
+	function spectrum(decimal){
+		// decimal should be from 0.0 to 1.0
+		if ( decimal < 0.0 ){
+			decimal = 0.0;
+		}
+		if ( decimal > 1.0 ){
+			decimal = 1.0;
+		}
+		var rgb,red,green,blue;
+		// green to yellow
+		if ( decimal < 0.5 ){
+			red = Math.round( decimal / 0.5 * 255)
+			green = 255;
+			blue = 0.0;
+		}
+		// yellow to red
+		if ( decimal >= 0.5 && decimal<=1.0){
+			red = 255;
+			green = Math.round(255-((decimal-0.5)/0.5)*255);
+			blue = 0.0;
+		}
+		rgb= "rgb("+red+","+green+","+blue+")"
+		return(rgb);
+	}

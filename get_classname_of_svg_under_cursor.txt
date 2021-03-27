@@ -1,0 +1,20 @@
+
+    function getClassnameOfSvgUnderCursor() {
+        var mouseClick;
+        var elementMouseIsOver;
+        var svgElementClass;
+        mouseClick = window.event;
+        if (mouseClick) {
+            var pageX = mouseClick.pageX;
+            var pageY = mouseClick.pageY;
+            elementMouseIsOver = document.elementFromPoint(pageX, pageY);
+            if (elementMouseIsOver) {
+                svgElementClass = elementMouseIsOver.getAttribute("class");
+                if (svgElementClass) {
+                    if (pduDictionary.hasOwnProperty(svgElementClass)) {
+                        console.log(pduDictionary[svgElementClass]);
+                    }
+                }
+            }
+        }
+    }

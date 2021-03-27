@@ -1,0 +1,858 @@
+<html>
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<style>
+
+#page {
+	width:100%;
+	height:48vw;
+	//background-image:url("progress.png");
+	//background-size: 100%;
+}
+#spacer0 {
+	float:left;
+	width:17%;
+	height:48vw;
+}
+#left {
+	float: left;
+	width: 22%;
+	height: 48vw;
+}
+#titleTop { 
+	float: top;
+	width: 100%;
+	height: 1.5vw;
+}
+#title { 
+	float: top;
+	width: 100%;
+	height: 15vw;
+}
+#budget { 
+	float: top;
+	width: 100%;
+	height: 25vw;
+}
+#info {
+	float: top;
+	width: 100%;
+	height: 8.2vw;
+}
+#spacer1 {
+	float: left;
+	width: 3%;
+	height: 48vw;
+}
+#middle {
+	float: left;
+	width: 15%;
+	height: 48vw;
+}
+#donutTop {
+	float: top;
+	width: 100%;
+	height: 4vw;
+}
+#donut1 { 
+	float: top;
+	width: 100%;
+	height: 12vw;
+}
+#donut2 { 
+	float: top;
+	width: 100%;
+	height: 12vw;
+}
+#donut3 { 
+	float: top;
+	width: 100%;
+	height: 12vw;
+}
+#spacer2 { 
+	float: left;
+	width: 7%;
+	height: 48vw;
+}
+#right { 
+	float: left;
+	width: 20%;
+	height: 48vw;
+}
+#wiggleTop {
+	float: top;
+	width: 100%;
+	height: 5vw;
+}
+#wiggle1 {
+	float: top;
+	width: 100%;
+	height: 11.5vw;
+}
+#wiggle2 {
+	float: top;
+	width: 100%;
+	height: 11.5vw;
+}
+#wiggle3 {
+	float: top;
+	width: 100%;
+	height: 11.5vw;
+}
+
+</style>
+</head>
+<body>
+<div id="page">
+	<div id="spacer0"></div>
+	<div id="left">
+		<div id="titleTop"></div>
+		<div id="title"><svg></svg></div>
+		<div id="budget"><svg></svg></div>
+		<div id="info"><svg></svg></div>
+	</div>
+	<div id="spacer1"></div>
+	<div id="middle">
+		<div id="donutTop"></div>
+		<div id="donut1" class="donut"><svg></svg></div>
+		<div id="donut2" class="donut"><svg></svg></div>
+		<div id="donut3" class="donut"><svg></svg></div>
+	</div>
+	<div id="spacer2"></div>
+	<div id="right">
+		<div id="wiggleTop"></div>
+		<div id="wiggle1" class="wiggle"><svg></svg></div>
+		<div id="wiggle2" class="wiggle"><svg></svg></div>
+		<div id="wiggle3" class="wiggle"><svg></svg></div>
+	</div>
+</div>
+<script>
+
+// create fake data 
+var allData = [];
+var budget1 = [];
+var budget2 = [];
+var donut1 = [];
+var donut2 = [];
+var donut3 = [];
+var donut1chunks = [];
+var donut2chunks = [];
+var donut3chunks = [];
+var wiggle1 = [];
+var wiggle2 = [];
+var wiggle3 = [];
+// budget	
+for ( var loop1=0; loop1<4; loop1++ ){
+	budget1.push( 0.5 + ( Math.random() * 0.5));
+	budget2.push( 0.5 + ( Math.random() * 0.5));
+}
+// donut names
+donut1.push("N3");
+donut2.push("P3");
+donut3.push("A2");
+// donut scores
+donut1.push(Math.floor(Math.random()*300));
+donut2.push(Math.floor(Math.random()*300));
+donut3.push(Math.floor(Math.random()*300));
+// donut wedges
+for (var donutloop=0; donutloop<6; donutloop++){
+	donut1chunks.push( 0.5 + ( Math.random() * 0.5)); 
+	donut2chunks.push( 0.5 + ( Math.random() * 0.5)); 
+	donut3chunks.push( 0.5 + ( Math.random() * 0.5));
+}
+donut1.push(donut1chunks);
+donut2.push(donut2chunks);
+donut3.push(donut3chunks);
+// wiggle data
+for ( var loop1=0; loop1<30; loop1++ ){
+	wiggle1.push( 0.2 + ( Math.random() * 0.8));
+	wiggle2.push( 0.2 + ( Math.random() * 0.8));
+	wiggle3.push( 0.2 + ( Math.random() * 0.8));
+}
+// assemble data
+allData.push(budget1);
+allData.push(budget2);
+allData.push(donut1);
+allData.push(donut2);
+allData.push(donut3);
+allData.push(wiggle1);
+allData.push(wiggle2);
+allData.push(wiggle3);
+
+
+
+redraw();
+window.addEventListener("resize", redraw);
+document.getElementById("spacer0").addEventListener("click", redraw);
+
+function redraw(){
+	var pageWidth = document.getElementById("page").clientWidth;
+	//console.log("page width = "+pageWidth);
+	if ( pageWidth > 1080 ){
+		cssDesktop();
+	} else {
+		cssMobile();
+	}
+	title("title");
+	budget("budget",allData);
+	info("info");
+	donut("donut1",allData[2]);
+	donut("donut2",allData[3]);
+	donut("donut3",allData[4]);
+	wiggle("wiggle1",allData[5]);
+	wiggle("wiggle2",allData[6]);
+	wiggle("wiggle3",allData[7]);
+}
+
+function cssDesktop(){
+	document.getElementById("page").style.width="95vw";
+	document.getElementById("page").style.height="40vw";
+	document.getElementById("spacer0").style.width="17vw";
+	document.getElementById("spacer0").style.height="40vw";
+	document.getElementById("left").style.width="22vw";
+	document.getElementById("left").style.height="40vw";
+	document.getElementById("titleTop").style.width="100%";
+	document.getElementById("titleTop").style.height="1.5vw";
+	document.getElementById("title").style.width="100%";
+	document.getElementById("title").style.height="15vw";
+	document.getElementById("budget").style.width="100%";
+	document.getElementById("budget").style.height="25vw";
+	document.getElementById("info").style.width="100%";
+	document.getElementById("info").style.height="1vw";
+	document.getElementById("spacer1").style.width="3vw";
+	document.getElementById("spacer1").style.height="40vw";
+	document.getElementById("middle").style.width="15vw";
+	document.getElementById("middle").style.height="40vw";
+	document.getElementById("donutTop").style.width="100%";
+	document.getElementById("donutTop").style.height="4vw";
+	document.getElementById("donut1").style.width="100%";
+	document.getElementById("donut1").style.height="12vw";
+	document.getElementById("donut2").style.width="100%";
+	document.getElementById("donut2").style.height="12vw";
+	document.getElementById("donut3").style.width="100%";
+	document.getElementById("donut3").style.height="12vw";
+	document.getElementById("spacer2").style.width="7vw";
+	document.getElementById("spacer2").style.height="40vw";
+	document.getElementById("right").style.width="20%";
+	document.getElementById("right").style.height="40vw";
+	document.getElementById("wiggleTop").style.width="100%";
+	document.getElementById("wiggleTop").style.height="5vw";
+	document.getElementById("wiggle1").style.width="100%";
+	document.getElementById("wiggle1").style.height="11.5vw";
+	document.getElementById("wiggle2").style.width="100%";
+	document.getElementById("wiggle2").style.height="11.5vw";
+	document.getElementById("wiggle3").style.width="100%";
+	document.getElementById("wiggle3").style.height="11.5vw";
+}
+
+function cssMobile(){
+	document.getElementById("spacer0").style.width="0vw";
+	document.getElementById("spacer0").style.height="0vw";
+	document.getElementById("left").style.width="100vw";
+	document.getElementById("left").style.height="131vw";
+	document.getElementById("titleTop").style.width="0vw";
+	document.getElementById("titleTop").style.height="0vw";
+	document.getElementById("title").style.width="95%";
+	document.getElementById("title").style.height="62vw";
+	document.getElementById("budget").style.width="95%";
+	document.getElementById("budget").style.height="50vw";
+	document.getElementById("info").style.width="95%";
+	document.getElementById("info").style.height="19vw";
+	document.getElementById("spacer1").style.width="0%";
+	document.getElementById("spacer1").style.height="0%";
+	document.getElementById("middle").style.width="100vw";
+	document.getElementById("middle").style.height="166vw";
+	document.getElementById("donutTop").style.height="0%";
+	document.getElementById("donutTop").style.height="0%";
+	document.getElementById("donut1").style.width="95%";
+	document.getElementById("donut1").style.height="70vw";
+	document.getElementById("donut2").style.width="95%";
+	document.getElementById("donut2").style.height="70vw";
+	document.getElementById("donut3").style.width="95%";
+	document.getElementById("donut3").style.height="70vw";
+	document.getElementById("spacer2").style.width="7%";
+	document.getElementById("right").style.width="100vw";
+	document.getElementById("right").style.height="159vw";
+	document.getElementById("wiggleTop").style.width="0%";
+	document.getElementById("wiggleTop").style.height="0%";
+	document.getElementById("wiggle1").style.width="95%";
+	document.getElementById("wiggle1").style.height="54vw";
+	document.getElementById("wiggle2").style.width="95%";
+	document.getElementById("wiggle2").style.height="54vw";
+	document.getElementById("wiggle3").style.width="95%";
+	document.getElementById("wiggle3").style.height="54vw";
+}
+
+function title(divName){
+	// get the div dimensions
+	var canvasWidth = document.getElementById(divName).clientWidth;
+	var canvasHeight = canvasWidth * 0.618;
+	svg = d3.select("#"+divName).select("svg");
+	svg.attr("width", canvasWidth).attr("height",canvasHeight);
+	svg.selectAll("*").remove();
+	border(divName,0,0,canvasWidth,canvasHeight,"green");
+	
+	svg.append("text")
+		.attr("x", canvasWidth * 0.042)
+		.attr("y", canvasHeight * 0.24)
+		.style("fill", "black")
+		.style("font-size", canvasWidth * 0.15)
+		.style("font-family", "sans-serif")
+		.style("text-anchor", "start")
+		.text("cPanel");
+	svg.append("text")
+		.attr("x", canvasWidth * 0.11)
+		.attr("y", canvasHeight * 0.41)
+		.style("fill", "black")
+		.style("font-size", canvasWidth * 0.07)
+		.style("font-family", "sans-serif")
+		.style("text-anchor", "start")
+		.text("sku-cpanel");
+	svg.append("text")
+		.attr("x", canvasWidth * 0.32)
+		.attr("y", canvasHeight * 0.73)
+		.style("fill", "black")
+		.style("font-size", canvasWidth * 0.051)
+		.style("font-family", "sans-serif")
+		.style("text-anchor", "start")
+		.text("Detail Inventory View");
+}
+
+function budget(divName,allData){
+	// extract data
+	var budget1 = allData[0];
+	var budget2 = allData[1];
+	// get the width of the page
+	// get the dimensions of the div
+	var canvasWidth = document.getElementById(divName).clientWidth;
+	var canvasHeight = canvasWidth * 0.5;
+	var chartFont = canvasWidth * 0.03;
+	var lineStrokeWidth = canvasWidth * 0.004;
+	var graphStrokeWidth = canvasWidth * 0.004;
+	var graphCircleRadius = canvasWidth * 0.006;
+	// get the svg canvas attached to the div
+	svg = d3.select("#"+divName).select("svg");
+	// resize to match the div
+	svg.attr("width", canvasWidth).attr("height",canvasHeight);
+	// clear previous content
+	svg.selectAll("*").remove();
+    border(divName,0,0,canvasWidth,canvasHeight,"red");
+
+	// prepare points for chart
+	// related dimensions
+	var fontFamily = "arial";
+	var graphStartX = canvasWidth * 0.08;
+	var graphStartY = canvasHeight * 0.84;
+	var graphSizeX = canvasWidth * 0.6;
+	var graphSizeY = canvasHeight * 0.78;
+	// other variables
+	var x,y,x1,x2,y1,y2,rx,ry;
+	var textx;
+	var texty;
+	var chartx;
+	var charty;
+	var pathData;
+	var xloop;
+	var yloop;
+	var colorOrange = "#fb8303";
+	var colorBlue = "#2676b9";
+	var colorGreyLight = "rgb(230,230,230)";
+	var colorGreyDark = "rgb(200,200,200)";
+	var points1 = [];
+	var points2 = [];
+	for ( var pointloop1 in budget1){
+		chartx = graphStartX + ( graphSizeX / 3 * pointloop1 );
+		charty = graphStartY - ( graphSizeY * budget1[pointloop1] );
+		points1.push([chartx,charty]);
+	}
+	for ( var pointloop2 in budget2){
+		chartx = graphStartX + ( graphSizeX / 3 * pointloop2 );
+		charty = graphStartY - ( graphSizeY * budget2[pointloop2] );
+		points2.push([chartx,charty]);
+	}
+	// draw vertical graph lines
+	for ( xloop=0; xloop<4; xloop++){
+		x1 = graphStartX + ( graphSizeX / 3 * xloop );
+		y1 = graphStartY;
+		x2 = x1;
+		y2 = graphStartY - graphSizeY;
+		svg.append("line")
+			.attr("x1", x1)
+			.attr("y1", y1)
+			.attr("x2", x2)
+			.attr("y2", y2)
+			.attr("stroke-width", lineStrokeWidth)
+			.attr("stroke", colorGreyLight);
+		textx = x1;
+		texty = graphStartY + ( canvasHeight * 0.06 );
+		svg.append("text")
+			.attr("x", textx)
+			.attr("y", texty)
+			.style("fill", colorGreyDark)
+			.style("font-size", chartFont)
+			.style("font-family", fontFamily)
+			.style("text-anchor", "middle")
+			.text(xloop);
+	}
+	// draw horizontal graph lines
+	for ( yloop=0; yloop<5; yloop++){
+		x1 = graphStartX;
+		y1 = graphStartY - ( yloop * graphSizeY / 4 );
+		x2 = graphStartX + graphSizeX;
+		y2 = graphStartY - ( yloop * graphSizeY / 4 );
+		textx = graphStartX - ( canvasWidth * 0.05 );
+		texty = y1 + ( canvasWidth * 0.01 );
+		svg.append("line")
+			.attr("x1", x1)
+			.attr("y1", y1)
+			.attr("x2", x2)
+			.attr("y2", y2)
+			.attr("stroke-width", lineStrokeWidth)
+			.attr("stroke", colorGreyLight);
+		svg.append("text")
+			.attr("x", textx)
+			.attr("y", texty)
+			.style("fill", colorGreyDark)
+			.style("font-size", chartFont)
+			.style("text-anchor", "middle")
+			.style("font-family", fontFamily)
+			.text(yloop*25);
+	}
+	lineGenerator = d3.line();
+	pathData = lineGenerator(points1);
+	svg.append("path")
+		.attr('d', pathData)
+		.attr("stroke", colorOrange)
+		.attr("stroke-width", graphStrokeWidth)
+		.attr("fill", "none");
+	pathData = lineGenerator(points2);
+	svg.append("path")
+		.attr('d', pathData)
+		.attr("stroke", colorBlue)
+		.attr("stroke-width", graphStrokeWidth)
+		.attr("fill", "none");
+	for ( var dotloop1 in points1 ){
+		svg.append("circle")
+			.attr("cx", points1[dotloop1][0])
+			.attr("cy", points1[dotloop1][1])
+			.attr("r", graphCircleRadius)
+			.attr("fill", colorOrange);
+	}
+	for ( var dotloop2 in points2 ){
+		svg.append("circle")
+			.attr("cx", points2[dotloop2][0])
+			.attr("cy", points2[dotloop2][1])
+			.attr("r", graphCircleRadius)
+			.attr("fill", colorBlue);
+	}
+	// little things in the top right
+	x1 = canvasWidth * 0.75;
+	y1 = canvasHeight * 0.18;
+	x2 = canvasWidth * 0.85;
+	y2 = y1;
+	stroke = canvasWidth * 0.004;
+	line(divName,x1,y1,x2,y2,stroke,"#ff7f0c");
+	y1 = canvasHeight * 0.1;
+	y2 = y1;
+	line(divName,x1,y1,x2,y2,stroke,"#2177b4");
+	x = canvasWidth * 0.8;
+	y = canvasHeight * 0.18;
+	rx = canvasWidth * 0.008;
+	ry = canvasWidth * 0.008;
+	fill = "green";
+	strokeWidth = canvasWidth * 0.01;
+	strokefill = "black";
+	ellipse(divName,x,y,rx,ry,"#ff7f0c",0,"none");
+	y = canvasHeight * 0.1;
+	ellipse(divName,x,y,rx,ry,"#2177b4",0,"none");
+	x = canvasWidth * 0.9;
+	y = canvasHeight * 0.11;
+	svg.append("text")
+		.attr("x", x)
+		.attr("y", y)
+		.style("fill", "black")
+		.style("font-size", chartFont)
+		.style("text-anchor", "start")
+		.text("trace 0");
+	x = canvasWidth * 0.9;
+	y = canvasHeight * 0.19;
+	svg.append("text")
+		.attr("x", x)
+		.attr("y", y)
+		.style("fill", "black")
+		.style("font-size", chartFont)
+		.style("text-anchor", "start")
+		.text("trace 1");
+}
+
+	function text(divName,x,y,fontSize,anchor,message){
+		var svg = d3.select("#"+divName).select("svg");
+		svg.append("text")
+			.attr("x", x)
+			.attr("y", y)
+			.style("fill", "black")
+			.style("font-size", fontSize)
+			.style("text-anchor", anchor)
+			.text(message);
+	}
+	
+	function wiggle(divName,data){
+		// get the dimensions of the div
+		var canvasWidth = document.getElementById(divName).clientWidth;
+		var canvasHeight = canvasWidth * 0.52;
+		// get the svg canvas attached to the div	
+		svg = d3.select("#"+divName).select("svg");
+		// resize to match the div
+		svg.attr("width", canvasWidth).attr("height",canvasHeight);
+		// clear previous content
+		svg.selectAll("*").remove();
+		border(divName,0,0,canvasWidth,canvasHeight,"orange");
+		var graphStartX = canvasWidth * 0.04;
+		var graphStartY = canvasHeight * 0.88;
+		var graphSizeX = canvasWidth * 0.92;
+		var graphSizeY = canvasHeight * 0.8;
+		var graphLine = canvasWidth * 0.01;
+		var lineStrokeWidth = canvasWidth * 0.004;
+		var graphStrokeWidth = canvasWidth * 0.004;
+		var graphCircleRadius = canvasWidth * 0.006;
+		var chartFont = canvasWidth * 0.03;
+		var colorOrange = "#fb8303";
+		var colorBlue = "#2676b9";
+	var colorGreyLight = "rgb(235,235,235)";
+	var colorGreyDark = "rgb(210,210,210)";
+		var tempColor;
+		var xloop,yloop;
+		var chartx;
+		var charty;
+		var x = 0;
+		var y = 0;
+		var points = [];
+		// prepare points for chart
+		for ( var pointloop in data){
+			chartx = graphStartX + ( graphSizeX / 29 * pointloop );
+			charty = graphStartY - ( graphSizeY * data[pointloop]);
+			points.push([chartx,charty]);
+		}
+		//
+		svg.append("line")
+			.attr("x1", graphStartX)
+			.attr("y1", graphStartY)
+			.attr("x2", graphStartX+graphSizeX)
+			.attr("y2", graphStartY)
+			.attr("stroke-width", lineStrokeWidth)
+			.attr("stroke", "#d5d5d5");
+		// vertical lines
+		for ( xloop=0; xloop<14; xloop++){
+			if ( xloop == 0 ){
+				tempColor = colorGreyDark;
+			} else {
+				tempColor = colorGreyLight;
+			}
+			// short line under graph
+			x1 = graphStartX + ( graphSizeX / 13 * xloop );
+			y1 = graphStartY;
+			x2 = x1;
+			y2 = graphStartY + ( canvasWidth * 0.01);
+			svg.append("line")
+				.attr("x1", x1)
+				.attr("y1", y1)
+				.attr("x2", x2)
+				.attr("y2", y2)
+				.attr("stroke-width", lineStrokeWidth)
+				.attr("stroke", colorGreyDark);
+			// full length vertical line
+			y1 = graphStartY;
+			y2 = graphStartY - graphSizeY;
+			svg.append("line")
+				.attr("x1", x1)
+				.attr("y1", y1)
+				.attr("x2", x2)
+				.attr("y2", y2)
+				.attr("stroke-width", lineStrokeWidth)
+				.attr("stroke", tempColor);
+			y1 = graphStartY + ( canvasWidth * 0.05 );
+			svg.append("text")
+				.attr("x", x1)
+				.attr("y", y1)
+				.style("fill", colorGreyDark)
+				.style("font-size", chartFont)
+				.style("text-anchor", "middle")
+				.text(1+xloop*2);
+		}
+		// horizontal lines
+		for ( yloop=0; yloop<5; yloop++){
+			if ( yloop == 0 ){
+				tempColor = colorGreyDark;
+			} else {
+				tempColor = colorGreyLight;
+			}
+			x1 = graphStartX;
+			y1 = graphStartY - ( graphSizeY / 4 * yloop );
+			x2 = graphStartX + graphSizeX;
+			y2 = y1;
+			svg.append("line")
+				.attr("x1", x1)
+				.attr("y1", y1)
+				.attr("x2", x2)
+				.attr("y2", y2)
+				.attr("stroke-width", lineStrokeWidth)
+				.attr("stroke", tempColor);
+			x = graphStartX - ( canvasWidth * 0.02 );
+			y = y1 + ( canvasWidth * 0.01 ); 
+			svg.append("text")
+				.attr("x", x)
+				.attr("y", y)
+				.style("fill", colorGreyDark)
+				.style("font-size", chartFont)
+				.style("text-anchor", "middle")
+				.text(yloop*2);
+		}
+		var lineGenerator = d3.line()
+			.curve(d3.curveCardinal);
+		var pathData = lineGenerator(points);
+		svg.append("path")
+			.attr('d', pathData)
+			.attr("stroke", "#4fd2dd")
+			.attr("stroke-width", 1)
+			.attr("fill", "none");
+	}
+
+	function line(divName,x1,y1,x2,y2,stroke,color){
+		svg = d3.select("#"+divName).select("svg");
+		svg.append("line")
+			.attr("x1", x1)
+			.attr("y1", y1)
+			.attr("x2", x2)
+			.attr("y2", y2)
+			.attr("stroke-width", stroke)
+			.attr("stroke", color);
+	}
+	
+	function polygon(scale,fill,strokewidth,strokefill,points){
+		svg = d3.select("#daneel");
+		svg.append("polygon")
+			.data([points])
+			.attr("points",function(d) { 
+							return d.map(function(d) {
+										return [(scale*d.x),(scale*d.y)].join(",");
+							}).join(" ");
+					})
+			.style("fill", fill)
+			.style("stroke", strokefill)
+			.style("stroke-width", strokewidth)
+			.style("stroke-linejoin", "round");
+	}
+
+	function ellipse(divName,cx,cy,rx,ry,fill,strokewidth,strokefill){
+		svg = d3.select("#"+divName).select("*");
+		svg.append("ellipse")
+			.attr("cx", cx)
+			.attr("cy", cy)
+			.attr("rx", rx)
+			.attr("ry", ry)
+			.attr("fill", fill)
+			.style("stroke", strokefill)
+			.style("strokeWidth", strokewidth);
+	}
+
+	function info(divName){
+		// get the div dimensions
+		var canvasWidth = document.getElementById(divName).clientWidth;
+		var canvasHeight = canvasWidth * 0.18;
+		// select the svg canvas
+		svg = d3.select("#"+divName).select("svg");
+		// resize to match div
+		svg.attr("width", canvasWidth).attr("height",canvasHeight);
+		// delete any previous content
+		svg.selectAll("*").remove();
+
+    	border(divName,0,0,canvasWidth,canvasHeight,"blue");
+
+		svg.append("circle")
+			.attr("cx", canvasWidth * 0.1)
+			.attr("cy", canvasHeight * 0.5)
+			.attr("r", canvasHeight * 0.45)
+			.attr("fill", "black");
+		svg.append("circle")
+			.attr("cx", canvasWidth * 0.1)
+			.attr("cy", canvasHeight * 0.5)
+			.attr("r", canvasHeight * 0.4)
+			.attr("fill", "white");
+		svg.append("text")
+			.attr("x", canvasWidth * 0.1)
+			.attr("y", canvasHeight * 0.75)
+			.style("fill", "black")
+			.style("font-size", canvasWidth * 0.15)
+			.style("text-anchor", "middle")
+			.text("i");
+		svg.append("text")
+			.attr("x", canvasWidth * 0.22)
+			.attr("y", canvasHeight * 0.4)
+			.style("fill", "black")
+			.style("font-size", canvasWidth * 0.07)
+			.style("text-anchor", "start")
+			.text("TTL Calculation Details &");
+		svg.append("text")
+			.attr("x", canvasWidth * 0.22)
+			.attr("y", canvasHeight * 0.8)
+			.style("fill", "black")
+			.style("font-size", canvasWidth * 0.07)
+			.style("text-anchor", "start")
+			.text("Data Confidence Metric");
+		svg.append("text")
+			.attr("x", 89)
+			.attr("y", 690)
+			.style("fill", "black")
+			.style("font-size", 25)
+			.style("text-anchor", "start")
+			.text("blah blah blah blah blah");
+		svg.append("text")
+			.attr("x", 97)
+			.attr("y", 716)
+			.style("fill", "black")
+			.style("font-size", 25)
+			.style("text-anchor", "start")
+			.text("blah blah blah blah blah");
+	}
+
+
+function border(divName,x,y,width,height,color){
+	if ( false ){
+		var svg = d3.select("#"+divName).select("svg");
+        	svg.append("rect")
+			.attr("x", x)
+			.attr("y", y)
+			.attr("width", width)
+			.attr("height", height)
+			.style("fill", "none")
+			.style("opacity", "1.0")
+			.style("stroke", "black")
+			.style("stroke-width","1");
+	}
+}
+
+function rect(divName,x,y,width,height,color){
+	var svg = d3.select("#"+divName).select("svg");
+	svg.append("rect")
+		.attr("x", x)
+		.attr("y", y)
+		.attr("width", width)
+		.attr("height", height)
+		.attr("fill", color);
+}
+
+function donut(divName,data){
+	// get the div dimensions
+	var canvasWidth = document.getElementById(divName).clientWidth;
+	var canvasHeight = canvasWidth * 0.7;
+	// select the svg canvas
+	svg = d3.select("#"+divName).select("svg");
+	// resize to match div
+	svg.attr("width", canvasWidth).attr("height",canvasHeight);
+	// delete any previous content
+	svg.selectAll("*").remove();
+    	border(divName,0,0,canvasWidth,canvasHeight,"pink");
+	var statusOuter = canvasHeight*0.5;
+	var statusInner = canvasHeight*0.45;
+	var donutOuter = canvasHeight*0.4;
+	var donutInner = canvasHeight*0.25;
+	var startangle = 0;
+	var endangle;
+	var total = 0;
+	var fill;
+	var x,y,r;
+	// extract data
+	var dc = data[0];
+	var score = data[1];
+	var donut = data[2];
+	// border
+	x = canvasWidth - ( canvasHeight * 0.5 );
+	y = canvasHeight * 0.5;
+	r = statusOuter;
+	svg.append("circle")
+		.attr("cx", x)
+		.attr("cy", y)
+		.attr("r", statusOuter)
+		.attr("fill", "green");
+	svg.append("circle")
+		.attr("cx", x)
+		.attr("cy", y)
+		.attr("r", statusInner)
+		.attr("fill", "white");
+	// calculate total
+	for ( var totalloop in donut ){
+		total = total + donut[totalloop];
+	}
+		
+		// draw the donut
+		for ( var arcloop in donut){
+			if ( arcloop == 0 ){
+				fill="#84caff"
+			}
+			if ( arcloop == 1 ){
+				fill="#7e0021"
+			}
+			if ( arcloop == 2 ){
+				fill="#579d1c"
+			}
+			if ( arcloop == 3 ){
+				fill="#ffd31f"
+			}
+			if ( arcloop == 4 ){
+				fill="#fe420c"
+			}
+			if ( arcloop == 5 ){
+				fill="#024586"
+			}
+			endangle = startangle+donut[arcloop]/total*Math.PI*2;
+			arc = d3.arc()
+				.innerRadius(donutInner)
+				.outerRadius(donutOuter)
+				.startAngle(startangle)
+				.endAngle(endangle);
+			trans="translate("+x+","+y+")";
+			svg.append("path")
+				.attr("d", arc)
+				.attr("transform", trans)
+				.attr("fill", fill);
+			startangle = endangle;
+		}
+		// center score
+		svg.append("text")
+			.attr("x", x)
+			.attr("y", y + canvasWidth * 0.04)
+			.style("font-size", canvasWidth * 0.1)
+			.style("font-weight", 500)
+			.style("text-anchor", "middle")
+			.attr("font-family", "sans-serif")
+			.attr("fill", "black")
+			.text(score);
+		// side circle
+		x = canvasWidth * 0.13;
+		y = canvasHeight * 0.7;
+		r = canvasWidth * 0.04;
+		svg.append("circle")
+			.attr("cx", x)
+			.attr("cy", y)
+			.attr("r", r)
+			.attr("fill", "green");
+		x = canvasWidth * 0.13;
+		y = canvasHeight * 0.55;
+		svg.append("text")
+			.attr("x", x)
+			.attr("y", y)
+			.style("font-size", canvasWidth * 0.12)
+			.style("font-weight", 500)
+			.style("text-anchor", "middle")
+			.attr("font-family", "sans-serif")
+			.attr("fill", "black")
+			.text(dc);
+	}
+
+
+</script>
+</body>
+</html>
+

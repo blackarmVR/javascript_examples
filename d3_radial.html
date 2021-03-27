@@ -1,0 +1,84 @@
+<html>
+<head>
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<meta content="utf-8" http-equiv="encoding">
+	<script src="https://d3js.org/d3.v4.js"></script>	
+</head>
+<body>
+	<div id="output"></div>
+	<script>
+		// get the percentage from the url
+		var url_string = window.location;
+		var url = new URL(url_string);
+		var percent = url.searchParams.get("percent");
+		if ( percent == null ){
+			percent = 50;
+		}
+		// create the svg canvas
+		d3.select("#output")
+			.append("svg")
+			.attr("id", "blah")
+			.attr("width", 1800)
+			.attr("height", 800);
+		// create the graph
+		radialBar(700,200,400,percent);
+	
+		function radialBar(x,y,size,value){
+			var donutOuter = size*0.45;
+			var donutInner = size*0.3;
+			var startangle,endangle;
+			var fill;
+			var chunks = 50;
+			var tau = Math.PI*2;
+
+			// draw the donut
+			svg = d3.select("#blah");
+			// rectangle
+			svg.append("rect")
+				.attr("x", x)
+				.attr("y", y)
+				.attr("width", size)
+				.attr("height", size)
+				.style("fill", "white")
+				.style("stroke", "black" )
+				.style("stroke-width", 4);
+			// chunks
+			for ( arcloop=0; arcloop<chunks; arcloop++){
+				if ( arcloop/chunks*100 < value ){
+					fill = "black";
+				} else {		
+					fill = "rgb(220,220,220)";
+				}
+				startangle = (tau/100*((100-percent)/2))+tau/chunks*arcloop;
+				endangle = startangle + (tau /chunks*0.4)
+				arc = d3.arc()
+					.innerRadius(donutInner)
+					.outerRadius(donutOuter)
+					.startAngle(startangle)
+					.endAngle(endangle);
+				trans="translate("+(x + (size/2))+","+(y + (size/2))+")";
+				svg.append("path")
+					.attr("d", arc)
+					.attr("transform", trans)
+					.attr("fill", fill);
+			}
+			// percentage
+			svg.append("text")
+				.attr("x", x + size*0.5)
+				.attr("y", y + size*0.6)
+				.style("font-size", size*0.3)
+				.style("font-weight", 400)
+				.style("text-anchor", "middle")
+				.text(percent);
+			// title
+			svg.append("text")
+				.attr("x", x + size*0.5)
+				.attr("y", y - size*0.06)
+				.style("font-size", 70)
+				.style("font-weight", 400)
+				.style("text-anchor", "middle")
+				.text("rack name");
+		}
+	</script>
+</body>
+</html>
