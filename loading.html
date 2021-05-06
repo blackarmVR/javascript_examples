@@ -1,0 +1,52 @@
+<html>
+	<head>
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
+		<!--
+		<script src="https://d3js.org/d3.v4.js"></script>
+		 -->
+		<style>
+		</style>
+	</head>
+	<body>
+		<div>
+            <button type="button" id="hide" class="btn btn-primary" title="hide">HIDE</button>
+                
+            <div id="loading">
+                <img src="loading.gif"></img>
+            </div>
+	 	</div>
+		<script>
+
+var loadingIconHidden = false;
+loadingDivResize();
+window.addEventListener("resize", loadingDivResize);
+document.getElementById("hide").addEventListener("click", change, false);
+
+function change(){
+    var divLoading = document.getElementById("loading");
+    if (loadingIconHidden){
+    divLoading.style.display = "block";
+    loadingIconHidden = false;
+    }
+    else {
+    divLoading.style.display = "none";
+    loadingIconHidden = true;
+    }
+}
+
+function loadingDivResize(){
+    var divLoading = document.getElementById("loading");
+    var pagewidth = window.innerWidth;
+    var pageheight = window.innerHeight;
+    var left = (pagewidth / 2) - 60;
+    var top = (pageheight / 2) - 60;
+    divLoading.style.position = 'absolute';
+    divLoading.style.left = left + "px";
+    divLoading.style.top = top + "px";
+    divLoading.style.width = "120px";
+    divLoading.style.height = "120px";
+}
+		</script>
+	</body>
+</html>

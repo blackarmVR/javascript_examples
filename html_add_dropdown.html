@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <!--
+    <script src="https://d3js.org/d3.v4.js"></script>
+     -->
+    <style>
+    
+    </style>
+  </head>
+  <body>
+    <div id="data"></div>
+    <script>
+
+    var ghost = document.getElementById("data");
+    var select = document.createElement("select");
+    var optionList = [];
+    var optionElement;
+    ghost.appendChild(select)
+    optionList.push(['Power - Average','powerAverage',false]);
+    optionList.push(['Power - Maximum','powerMaximum',false]);
+    optionList.push(['Slot availability','slotAvailability',true]);
+    optionList.forEach(function(option){
+      optionElement = document.createElement('option');
+      optionElement.text = option[0];
+      optionElement.value = option[1];
+      optionElement.disabled = option[2];
+      select.appendChild(optionElement);
+    });
+
+    </script>
+  </body>
+</html>
+

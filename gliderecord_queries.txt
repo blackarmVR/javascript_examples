@@ -1,0 +1,42 @@
+<html>
+<head>
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<meta content="utf-8" http-equiv="encoding">
+	<script src="https://d3js.org/d3.v4.js"></script>	
+</head>
+<body>
+	<script>
+
+		// query with single result
+		var grRoom = new GlideRecord("cmdb_ci_computer_room");
+		grRoom.addQuery("sys_id", roomSysId);
+		grRoom.setLimit(1); 
+		grRoom.query();
+		while(grRoom.next()){
+			roomName = grRoom.getValue("name");
+		}
+
+		// collect sysids for batch query
+		var grRel = new GlideRecord("cmdb_rel_ci");
+		grRel.addQuery("parent", roomSysId);
+		grRel.query();
+		while(grRel.next()){
+			zoneSysid = grRel.getValue("child");
+			if (zoneSysidList.indexOf(zoneSysid) < 0 ) {
+				zoneSysidList.push(zoneSysid);
+			}
+		}
+
+		// batch query
+		var grZone = new GlideRecord("cmdb_ci_zone");
+		grZone.addQuery("sys_id", "IN", zoneSysidList);
+		grZone.setLimit(zoneSysidList.length)
+		grZone.query();
+		while(grZone.next()){
+			name = grZone.getValue("name");
+		}
+
+	</script>
+</body>
+</html>
+

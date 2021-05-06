@@ -1,0 +1,71 @@
+<html>
+	<head>
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
+		<script src="https://d3js.org/d3.v4.js"></script>
+		<style>
+		
+		</style>
+	</head>
+	<body>
+		<div>
+			<svg id="page"></svg>
+	 	</div>
+		<script>
+
+		// svg canvas
+		var loop;
+		var svgcanvas = d3.select("#page");
+		svgcanvas.attr("width", 1800).attr("height", 900);
+
+		// alpha circle
+		svgcanvas.append('circle')
+            .attr("cx", 100)
+            .attr("cy", 100)
+            .attr("r", 60)
+			.attr("fill", 'rgb(255,0,0)')
+			.attr("class", "alpha")
+			.on("click", trigger);
+		svgcanvas.append('text')
+			.attr("x", 100)
+			.attr("y", 108)
+			.style("font-size", "20px")
+			.style("text-anchor", "middle")
+			.style("font-weight", 800)
+			.attr("fill", "white")
+			.attr("class", "alpha")
+			.text("alpha")
+			.on("click", trigger);
+
+		// bravo circle
+		svgcanvas.append('circle')
+            .attr("cx", 300)
+            .attr("cy", 100)
+            .attr("r", 60)
+			.attr("fill", 'rgb(0,0,255)')
+			.attr("class", "bravo")
+			.on("click", trigger);
+		svgcanvas.append('text')
+			.attr("x", 300)
+			.attr("y", 108)
+			.style("font-size", "20px")
+			.style("text-anchor", "middle")
+			.style("font-weight", 800)
+			.attr("fill", "white")
+			.attr("class", "bravo")
+			.text("bravo")
+			.on("click", trigger);
+
+	function trigger(){
+		var svgCanvas = document.getElementById('page');
+		var canvasRect = svgCanvas.getBoundingClientRect();
+		console.log(canvasRect);
+  		var mouse = d3.mouse(this);
+		var elem = document.elementFromPoint(mouse[0] + canvasRect["x"], mouse[1] + canvasRect["y"]);
+		console.log(elem.className.baseVal)
+	}
+
+
+		</script>
+	</body>
+</html>

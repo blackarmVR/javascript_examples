@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <!--
+    <script src="https://d3js.org/d3.v4.js"></script>
+     -->
+    <style>
+
+    </style>
+  </head>
+  <body>
+    <div>
+     </div>
+    <script>
+
+
+  var data = ['123','456'];
+  download(data,'data.json');
+
+  function download(data,filename){
+    var jsonData;
+    var encodedData;
+    var download;
+    jsonData = JSON.stringify(data, null, 2);
+    encodedData = 'data:text/plain;charset=utf-8,' + encodeURIComponent(jsonData);
+    download = document.createElement('a');
+    download.setAttribute('href', encodedData );
+    download.setAttribute('download', filename);
+    document.body.appendChild(download);
+    download.click();
+    document.body.removeChild(download);
+  }
+
+
+/*
+
+    var filename = "test.json";
+    var jsonData = JSON.stringify(data, null, 2);
+    var encodedData = 'data:text/plain;charset=utf-8,' + encodeURIComponent(jsonData);
+    var download = document.createElement('a');
+    download.setAttribute('href', encodedData );
+    download.setAttribute('download', filename);
+    document.body.appendChild(download);
+    download.click();
+    document.body.removeChild(download);
+
+*/
+
+    </script>
+  </body>
+</html>

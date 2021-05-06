@@ -1,0 +1,31 @@
+<html>
+	<head>
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
+		<!--
+		<script src="https://d3js.org/d3.v4.js"></script>
+		 -->
+		<style>
+		
+		</style>
+	</head>
+	<body>
+		<pre id="output"></pre>
+		<script>
+
+            var data = [{"key":"value"},{"foo":"blah"}];
+            var pretty = JSON.stringify(data, null, 2);
+            addText(pretty);
+
+            function addText(pretty){
+                var preformatted = document.getElementById("output");
+                var textNode = document.createTextNode(pretty);
+                var linebreak = document.createElement("br");
+                preformatted.innerHTML = "";
+                preformatted.appendChild(textNode);
+                preformatted.appendChild(linebreak);
+            }
+
+		</script>
+	</body>
+</html>

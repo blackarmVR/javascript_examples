@@ -1,0 +1,24 @@
+<html>
+	<head>
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
+	</head>
+	<body>
+		<div id="result"></div>
+		<script>
+			var jsonstuff = [{"name":"dave","blah":[1,2,3,4]},{"name":"bert","blah":[5,6,7,8]}];
+			showJson("result",jsonstuff);
+
+		    function showJson(divName,output){
+       			var pre;
+        		var text;
+        		text = document.createTextNode(JSON.stringify(output, null, 2));
+        		pre = document.createElement("PRE");
+        		pre.appendChild(text);
+        		document.getElementById(divName).appendChild(pre);
+    		}
+
+		</script>
+	</body>
+</html>
+

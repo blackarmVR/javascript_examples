@@ -1,0 +1,70 @@
+<html>
+	<head>
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
+		<!--
+		<script src="https://d3js.org/d3.v4.js"></script>
+		 -->
+		<style>
+
+table, td {
+	border: 1px solid black;
+	padding: 3px;
+}
+th {
+	border: 1px solid black;
+	background-color: rgb(153,204,255);
+	padding: 3px;
+}
+
+		</style>
+	</head>
+	<body>
+		<div id="target">
+	 	</div>
+		<script>
+
+	var dataHeader = ["header1","header2","header3"];
+	var dataContent = [
+		["alpha1","alpha2","alpha3"],
+		["bravo1","bravo2","bravo3"]
+	];
+
+	createTable("target",dataHeader,dataContent);
+
+	function createTable(divName,dataHeader,dataContent){
+		var table, thead, row, th, text, cell;
+		var div = document.getElementById(divName);
+		var child;
+		// clear div
+		child = div.lastElementChild;
+		while (child) { 
+			div.removeChild(child); 
+			child = div.lastElementChild; 
+		}
+		// headings
+		table = document.createElement('table');
+		thead = table.createTHead();
+		row = thead.insertRow();
+		dataHeader.forEach(function(header){
+			th = document.createElement("th");
+			text = document.createTextNode(header);
+			th.appendChild(text);
+			row.appendChild(th);
+		});
+		// content
+		dataContent.forEach(function(rowContent){
+			row = table.insertRow();
+			rowContent.forEach(function(cellData){
+				cell = row.insertCell();
+				text = document.createTextNode(cellData);
+				cell.appendChild(text);
+				row.appendChild(cell);
+			});
+		})
+		div.appendChild(table);
+	}
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,11 @@
+
+/**
+ * @function xxxxxx
+ * @description xxxxxxxxx
+ * @param {string} xxxxx - xxxxx
+ * @param {boolean} xxxxx - xxxxx
+ * @param {number} xxxxx - xxxxx
+ * @param {Object} xxxxx - xxxxx
+ * @param {Array.<Object>} xxxxx - xxxxx
+ * @return {string} xxxxx - xxxxx
+ */

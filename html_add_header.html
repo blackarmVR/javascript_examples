@@ -1,0 +1,28 @@
+<html>
+    <head>
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+        <meta content="utf-8" http-equiv="encoding">
+        <!--
+        <script src="https://d3js.org/d3.v4.js"></script>
+         -->
+        <style>
+
+        </style>
+    </head>
+    <body>
+        <pre id="output"></pre>
+        <script>
+
+    addHeader("hello world.");
+
+    function addHeader(headerText){
+        var outputDiv = document.getElementById("output");
+        var header = document.createElement('h1');
+        var text = document.createTextNode(headerText);
+        header.appendChild(text);
+        outputDiv.appendChild(header);
+    }
+
+        </script>
+    </body>
+</html>
