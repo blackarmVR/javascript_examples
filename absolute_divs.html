@@ -1,0 +1,69 @@
+<html>
+    <head>
+        <style>
+            #alpha {
+                background-color: green;
+                overflow: scroll;
+                position: absolute;
+            }
+            #bravo {
+                background-color: blue;
+                overflow: scroll;
+                position: absolute;
+            }
+            #charlie {
+                background-color: red;
+                overflow: scroll;
+                position: absolute;
+            }
+            #delta {
+                background-color: orange;
+                overflow: scroll;
+                position: absolute;
+            }
+        </style>
+    </head>
+    <body> 
+        <div id="alpha"></div>
+        <div id="bravo"></div>
+        <div id="charlie"></div>
+        <div id="delta"></div>
+    </body>
+    <script>
+    /**
+     * @function pageDivDimensions
+     * @description sets the div dimensions
+     */
+    function pageDivDimensions() {
+        var divElement;
+        pageWidth = window.innerWidth;
+        pageHeight = window.innerHeight;
+        // alpha
+        divElement = document.getElementById("alpha");
+        divElement.style.left = (pageWidth * 0.1) + "px";
+        divElement.style.top = (pageHeight * 0.1) + "px";
+        divElement.style.width = (pageWidth * 0.3) + "px";
+        divElement.style.height = (pageHeight * 0.3) + "px";
+        // bravo
+        divElement = document.getElementById("bravo");
+        divElement.style.left = (pageWidth * 0.6) + "px";
+        divElement.style.top = (pageHeight * 0.1) + "px";
+        divElement.style.width = (pageWidth * 0.3) + "px";
+        divElement.style.height = (pageHeight * 0.3) + "px";
+        // charlie
+        divElement = document.getElementById("charlie");
+        divElement.style.left = (pageWidth * 0.1) + "px";
+        divElement.style.top = (pageHeight * 0.6) + "px";
+        divElement.style.width = (pageWidth * 0.3) + "px";
+        divElement.style.height = (pageHeight * 0.3) + "px";
+        // delta
+        divElement = document.getElementById("delta");
+        divElement.style.left = (pageWidth * 0.6) + "px";
+        divElement.style.top = (pageHeight * 0.6) + "px";
+        divElement.style.width = (pageWidth * 0.3) + "px";
+        divElement.style.height = (pageHeight * 0.3) + "px";
+    }
+    window.addEventListener("resize", pageDivDimensions);
+    pageDivDimensions();
+    </script>
+</html>
