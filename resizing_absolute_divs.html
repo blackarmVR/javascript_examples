@@ -1,0 +1,47 @@
+<html>
+    <head>
+        <style>
+            #alpha {
+                overflow: scroll;
+                position: absolute;
+                border: solid;
+            }
+            #bravo {
+                overflow: scroll;
+                position: absolute;
+                border: solid;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="alpha"></div>
+        <div id="bravo"></div>
+        <script>
+
+    /**
+     * @function pageDivDimensions
+     * @description sets the div dimensions
+     */
+    function pageDivDimensions() {
+        var divElement;
+        pageWidth = window.innerWidth;
+        pageHeight = window.innerHeight;
+        // alpha
+        divElement = document.getElementById("alpha");
+        divElement.style.left = "20px";
+        divElement.style.top = "70px";
+        divElement.style.width = "220px";
+        divElement.style.height = (pageHeight - 70 - 20) + "px";
+        // bravo
+        divElement = document.getElementById("bravo");
+        divElement.style.left = "250px";
+        divElement.style.top = "70px";
+        divElement.style.width = (pageWidth - 250 - 20) + "px";
+        divElement.style.height = (pageHeight - 20 - 70) + "px";
+    }
+    window.addEventListener("resize", pageDivDimensions);
+    pageDivDimensions();
+
+        </script>
+    </body>
+</html>
