@@ -1,0 +1,157 @@
+<html>
+    <head>
+        <style>
+            #top {
+                position: absolute;
+                background-color: rgb(245, 245, 245);
+            }
+            #alpha {
+                position: absolute;
+                background-color: rgb(245, 245, 245);
+            }
+            #bravo {
+                position: absolute;
+                background-color: rgb(245, 245, 245);
+            }
+            #resizeHorizontal {
+                position: absolute;
+                background-color: rgb(220, 220, 220);
+                cursor: ew-resize;
+            }
+            #resizeVertical {
+                position: absolute;
+                background-color: rgb(220, 220, 220);
+                cursor: ns-resize;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="top"></div>
+        <div id="alpha"></div>
+        <div id="bravo"></div>
+        <div id="resizeHorizontal"></div>
+        <div id="resizeVertical"></div>
+        <script>
+
+    /**
+     * @function pageDivDimensions
+     * @description sets the div dimensions
+     */
+    function pageDivDimensions() {
+        var divElement;
+        var border = 10;
+        pageWidth = window.innerWidth;
+        pageHeight = window.innerHeight;
+        // top
+        divElement = document.getElementById("top");
+        divElement.style.left = border + "px";
+        divElement.style.top = border + "px";
+        divElement.style.width = (pageWidth - (border * 2)) + "px";
+        divElement.style.height = (dragVerticalPosition - 1 - (border * 2)) + "px";
+        // alpha
+        divElement = document.getElementById("alpha");
+        divElement.style.left = border + "px";
+        divElement.style.top = (dragVerticalPosition + 1 + border) + "px";
+        divElement.style.width = (dragHorizontalPosition  - 1 - (border * 2)) + "px";
+        divElement.style.height = (pageHeight - 1 - dragVerticalPosition - (border * 2)) + "px";
+        // bravo
+        divElement = document.getElementById("bravo");
+        divElement.style.left = (dragHorizontalPosition + border + 1) + "px";
+        divElement.style.top = (dragVerticalPosition + 1 + border) + "px";
+        divElement.style.width = (pageWidth - dragHorizontalPosition - (border * 2) - 1) + "px";
+        divElement.style.height = (pageHeight - dragVerticalPosition - (border * 2) - 1) + "px";
+        // resizeHorizontal
+        divElement = document.getElementById("resizeHorizontal");
+        divElement.style.left = (dragHorizontalPosition - 1) + "px";
+        divElement.style.top = (dragVerticalPosition + 1 + border) + "px";
+        divElement.style.width = "2px";
+        divElement.style.height = (pageHeight - dragVerticalPosition - (border * 2) - 1) + "px";
+        // resizeVertical
+        divElement = document.getElementById("resizeVertical");
+        divElement.style.left = border + "px";
+        divElement.style.top = (dragVerticalPosition - 1) + "px";
+        divElement.style.width = (pageWidth - (border * 2)) + "px";
+        divElement.style.height = "2px";
+    }
+    function resizeHorizontal(e){
+        dragHorizontalPosition = e.x;
+        pageDivDimensions();
+    }
+    function resizeVertical(e){
+        dragVerticalPosition = e.y;
+        pageDivDimensions();
+    }
+
+    var dragHorizontal = document.getElementById("resizeHorizontal");
+    var dragHorizontalPosition = 200;
+    var dragVertical = document.getElementById("resizeVertical");
+    var dragVerticalPosition = 120;
+
+    dragHorizontal.addEventListener("mousedown", function(e){
+        document.addEventListener("mousemove", resizeHorizontal, false);
+    }, false);
+
+    dragVertical.addEventListener("mousedown", function(e){
+        document.addEventListener("mousemove", resizeVertical, false);
+    }, false);
+
+    document.addEventListener("mouseup", function(){
+        document.removeEventListener("mousemove", resizeHorizontal, false);
+        document.removeEventListener("mousemove", resizeVertical, false);
+    }, false);
+
+    window.addEventListener("resize", pageDivDimensions);
+    pageDivDimensions();
+
+
+    /*
+
+    var m_pos;
+function resize(e){
+    var parent = dragHorizontal.parentNode;
+    var dx = m_pos - e.x;
+    m_pos = e.x;
+    parent.style.width = (parseInt(getComputedStyle(parent, '').width) + dx) + "px";
+}
+
+var dragHorizontal = document.getElementById("resize");
+dragHorizontal.addEventListener("mousedown", function(e){
+    m_pos = e.x;
+    document.addEventListener("mousemove", resize, false);
+}, false);
+document.addEventListener("mouseup", function(){
+    document.removeEventListener("mousemove", resize, false);
+}, false);
+
+#right_panel {
+    position: absolute;
+    width: 96px;
+    padding-left: 4px;
+    height: 100%;
+    right: 0;
+    background-color: #f0f0f0;
+}
+
+#resize {
+    background-color: #ccc;
+    position: absolute;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    cursor: w-resize;
+}
+
+<body>
+    <div id="right_panel">
+        <div id="resize"></div>
+    </div>
+</body>
+
+*/
+
+
+
+
+        </script>
+    </body>
+</html>
