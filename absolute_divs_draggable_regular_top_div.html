@@ -1,10 +1,6 @@
 <html>
     <head>
         <style>
-            #top {
-                position: absolute;
-                background-color: rgb(245, 245, 245);
-            }
             #alpha {
                 position: absolute;
                 background-color: rgb(245, 245, 245);
@@ -18,74 +14,66 @@
                 background-color: rgb(230, 230, 230);
                 cursor: ew-resize;
             }
-            #resizeVertical {
-                position: absolute;
-                background-color: rgb(230, 230, 230);
-                cursor: ns-resize;
-            }
         </style>
     </head>
     <body>
-        <div id="top"></div>
+        <div id="top">
+            <input type="text" id="name" name="name">
+            <input type="text" id="name" name="name">
+            <input type="text" id="name" name="name">
+            <input type="text" id="name" name="name">
+            <input type="text" id="name" name="name">
+            <input type="text" id="name" name="name">
+            <input type="text" id="name" name="name">
+            <input type="text" id="name" name="name">
+            <input type="text" id="name" name="name">
+        </div>
         <div id="alpha"></div>
         <div id="bravo"></div>
         <div id="resizeHorizontal"></div>
-        <div id="resizeVertical"></div>
         <script>
             
     function pageDivDimensions() {
         var divElement;
         var border = 5;
         var lineThickness = 3;
+        var topElement;
+        var topDivUnder;
+        var rect;
         pageWidth = window.innerWidth;
         pageHeight = window.innerHeight;
-        // top
-        divElement = document.getElementById("top");
-        divElement.style.left = border + "px";
-        divElement.style.top = border + "px";
-        divElement.style.width = (pageWidth - (border * 2)) + "px";
-        divElement.style.height = (dragVerticalPosition - (lineThickness * 0.5) - (border * 2)) + "px";
+        topElement = document.getElementById("top");
+        rect = topElement.getBoundingClientRect();
+        topDivUnder = rect.top + rect.height + border;
         // alpha
         divElement = document.getElementById("alpha");
         divElement.style.left = border + "px";
-        divElement.style.top = (dragVerticalPosition + (lineThickness * 0.5) + border) + "px";
+        divElement.style.top = topDivUnder + "px";
         divElement.style.width = (dragHorizontalPosition  - (lineThickness * 0.5) - (border * 2)) + "px";
-        divElement.style.height = (pageHeight - (lineThickness * 0.5) - dragVerticalPosition - (border * 2)) + "px";
+        divElement.style.height = (pageHeight - topDivUnder - (border * 2)) + "px";
         // bravo
         divElement = document.getElementById("bravo");
         divElement.style.left = (dragHorizontalPosition + border + (lineThickness * 0.5)) + "px";
-        divElement.style.top = (dragVerticalPosition + (lineThickness * 0.5) + border) + "px";
+        divElement.style.top = topDivUnder + "px";
         divElement.style.width = (pageWidth - dragHorizontalPosition - (border * 2) - (lineThickness * 0.5)) + "px";
-        divElement.style.height = (pageHeight - dragVerticalPosition - (border * 2) - (lineThickness * 0.5)) + "px";
+        divElement.style.height = (pageHeight - topDivUnder - (border * 2)) + "px";
         // resizeHorizontal
         divElement = document.getElementById("resizeHorizontal");
         divElement.style.left = (dragHorizontalPosition - (lineThickness * 0.5)) + "px";
-        divElement.style.top = (dragVerticalPosition + lineThickness + border) + "px";
+        divElement.style.top = topDivUnder + "px";
         divElement.style.width = lineThickness + "px";
-        divElement.style.height = (pageHeight - dragVerticalPosition - (border * 2) - lineThickness) + "px";
-        // resizeVertical
-        divElement = document.getElementById("resizeVertical");
-        divElement.style.left = border + "px";
-        divElement.style.top = (dragVerticalPosition - (lineThickness * 0.5)) + "px";
-        divElement.style.width = (pageWidth - (border * 2)) + "px";
-        divElement.style.height = lineThickness + "px";
+        divElement.style.height = (pageHeight - topDivUnder - (border * 2)) + "px";
     }
 
     function dragSetup(){
         var dragHorizontal = document.getElementById("resizeHorizontal");
-        var dragVertical = document.getElementById("resizeVertical");
         // clicking on horizontal drag bar 
         dragHorizontal.addEventListener("mousedown", function(e){
             document.addEventListener("mousemove", resizeHorizontal, false);
         }, false);
-        // clicking on vertical drag bar 
-        dragVertical.addEventListener("mousedown", function(e){
-            document.addEventListener("mousemove", resizeVertical, false);
-        }, false);
         // deactivating drag actions when mouse button is released
         document.addEventListener("mouseup", function(){
             document.removeEventListener("mousemove", resizeHorizontal, false);
-            document.removeEventListener("mousemove", resizeVertical, false);
         }, false);
     }
 
@@ -94,13 +82,7 @@
         pageDivDimensions();
     }
 
-    function resizeVertical(e){
-        dragVerticalPosition = e.y;
-        pageDivDimensions();
-    }
-
     var dragHorizontalPosition = 200;
-    var dragVerticalPosition = 120;
     dragSetup();
     window.addEventListener("resize", pageDivDimensions);
     pageDivDimensions();
