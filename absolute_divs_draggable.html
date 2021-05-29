@@ -15,12 +15,12 @@
             }
             #resizeHorizontal {
                 position: absolute;
-                background-color: rgb(220, 220, 220);
+                background-color: rgb(230, 230, 230);
                 cursor: ew-resize;
             }
             #resizeVertical {
                 position: absolute;
-                background-color: rgb(220, 220, 220);
+                background-color: rgb(230, 230, 230);
                 cursor: ns-resize;
             }
         </style>
@@ -39,8 +39,8 @@
      */
     function pageDivDimensions() {
         var divElement;
-        var border = 10;
-        var lineThickness = 4;
+        var border = 5;
+        var lineThickness = 3;
         pageWidth = window.innerWidth;
         pageHeight = window.innerHeight;
         // top
@@ -74,84 +74,40 @@
         divElement.style.width = (pageWidth - (border * 2)) + "px";
         divElement.style.height = lineThickness + "px";
     }
+
+    function dragSetup(){
+        var dragHorizontal = document.getElementById("resizeHorizontal");
+        var dragVertical = document.getElementById("resizeVertical");
+        // clicking on horizontal drag bar 
+        dragHorizontal.addEventListener("mousedown", function(e){
+            document.addEventListener("mousemove", resizeHorizontal, false);
+        }, false);
+        // clicking on vertical drag bar 
+        dragVertical.addEventListener("mousedown", function(e){
+            document.addEventListener("mousemove", resizeVertical, false);
+        }, false);
+        // deactivating drags when mouse button is released
+        document.addEventListener("mouseup", function(){
+            document.removeEventListener("mousemove", resizeHorizontal, false);
+            document.removeEventListener("mousemove", resizeVertical, false);
+        }, false);
+    }
+
     function resizeHorizontal(e){
         dragHorizontalPosition = e.x;
         pageDivDimensions();
     }
+
     function resizeVertical(e){
         dragVerticalPosition = e.y;
         pageDivDimensions();
     }
 
-    var dragHorizontal = document.getElementById("resizeHorizontal");
     var dragHorizontalPosition = 200;
-    var dragVertical = document.getElementById("resizeVertical");
     var dragVerticalPosition = 120;
-
-    dragHorizontal.addEventListener("mousedown", function(e){
-        document.addEventListener("mousemove", resizeHorizontal, false);
-    }, false);
-
-    dragVertical.addEventListener("mousedown", function(e){
-        document.addEventListener("mousemove", resizeVertical, false);
-    }, false);
-
-    document.addEventListener("mouseup", function(){
-        document.removeEventListener("mousemove", resizeHorizontal, false);
-        document.removeEventListener("mousemove", resizeVertical, false);
-    }, false);
-
+    dragSetup();
     window.addEventListener("resize", pageDivDimensions);
     pageDivDimensions();
-
-
-    /*
-
-    var m_pos;
-function resize(e){
-    var parent = dragHorizontal.parentNode;
-    var dx = m_pos - e.x;
-    m_pos = e.x;
-    parent.style.width = (parseInt(getComputedStyle(parent, '').width) + dx) + "px";
-}
-
-var dragHorizontal = document.getElementById("resize");
-dragHorizontal.addEventListener("mousedown", function(e){
-    m_pos = e.x;
-    document.addEventListener("mousemove", resize, false);
-}, false);
-document.addEventListener("mouseup", function(){
-    document.removeEventListener("mousemove", resize, false);
-}, false);
-
-#right_panel {
-    position: absolute;
-    width: 96px;
-    padding-left: 4px;
-    height: lineThickness00%;
-    right: 0;
-    background-color: #f0f0f0;
-}
-
-#resize {
-    background-color: #ccc;
-    position: absolute;
-    left: 0;
-    width: 4px;
-    height: lineThickness00%;
-    cursor: w-resize;
-}
-
-<body>
-    <div id="right_panel">
-        <div id="resize"></div>
-    </div>
-</body>
-
-*/
-
-
-
 
         </script>
     </body>
