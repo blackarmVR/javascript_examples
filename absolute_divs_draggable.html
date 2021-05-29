@@ -40,6 +40,7 @@
     function pageDivDimensions() {
         var divElement;
         var border = 10;
+        var lineThickness = 4;
         pageWidth = window.innerWidth;
         pageHeight = window.innerHeight;
         // top
@@ -47,31 +48,31 @@
         divElement.style.left = border + "px";
         divElement.style.top = border + "px";
         divElement.style.width = (pageWidth - (border * 2)) + "px";
-        divElement.style.height = (dragVerticalPosition - 1 - (border * 2)) + "px";
+        divElement.style.height = (dragVerticalPosition - (lineThickness * 0.5) - (border * 2)) + "px";
         // alpha
         divElement = document.getElementById("alpha");
         divElement.style.left = border + "px";
-        divElement.style.top = (dragVerticalPosition + 1 + border) + "px";
-        divElement.style.width = (dragHorizontalPosition  - 1 - (border * 2)) + "px";
-        divElement.style.height = (pageHeight - 1 - dragVerticalPosition - (border * 2)) + "px";
+        divElement.style.top = (dragVerticalPosition + (lineThickness * 0.5) + border) + "px";
+        divElement.style.width = (dragHorizontalPosition  - (lineThickness * 0.5) - (border * 2)) + "px";
+        divElement.style.height = (pageHeight - (lineThickness * 0.5) - dragVerticalPosition - (border * 2)) + "px";
         // bravo
         divElement = document.getElementById("bravo");
-        divElement.style.left = (dragHorizontalPosition + border + 1) + "px";
-        divElement.style.top = (dragVerticalPosition + 1 + border) + "px";
-        divElement.style.width = (pageWidth - dragHorizontalPosition - (border * 2) - 1) + "px";
-        divElement.style.height = (pageHeight - dragVerticalPosition - (border * 2) - 1) + "px";
+        divElement.style.left = (dragHorizontalPosition + border + (lineThickness * 0.5)) + "px";
+        divElement.style.top = (dragVerticalPosition + (lineThickness * 0.5) + border) + "px";
+        divElement.style.width = (pageWidth - dragHorizontalPosition - (border * 2) - (lineThickness * 0.5)) + "px";
+        divElement.style.height = (pageHeight - dragVerticalPosition - (border * 2) - (lineThickness * 0.5)) + "px";
         // resizeHorizontal
         divElement = document.getElementById("resizeHorizontal");
-        divElement.style.left = (dragHorizontalPosition - 1) + "px";
-        divElement.style.top = (dragVerticalPosition + 1 + border) + "px";
-        divElement.style.width = "2px";
-        divElement.style.height = (pageHeight - dragVerticalPosition - (border * 2) - 1) + "px";
+        divElement.style.left = (dragHorizontalPosition - (lineThickness * 0.5)) + "px";
+        divElement.style.top = (dragVerticalPosition + lineThickness + border) + "px";
+        divElement.style.width = lineThickness + "px";
+        divElement.style.height = (pageHeight - dragVerticalPosition - (border * 2) - lineThickness) + "px";
         // resizeVertical
         divElement = document.getElementById("resizeVertical");
         divElement.style.left = border + "px";
-        divElement.style.top = (dragVerticalPosition - 1) + "px";
+        divElement.style.top = (dragVerticalPosition - (lineThickness * 0.5)) + "px";
         divElement.style.width = (pageWidth - (border * 2)) + "px";
-        divElement.style.height = "2px";
+        divElement.style.height = lineThickness + "px";
     }
     function resizeHorizontal(e){
         dragHorizontalPosition = e.x;
@@ -127,7 +128,7 @@ document.addEventListener("mouseup", function(){
     position: absolute;
     width: 96px;
     padding-left: 4px;
-    height: 100%;
+    height: lineThickness00%;
     right: 0;
     background-color: #f0f0f0;
 }
@@ -137,7 +138,7 @@ document.addEventListener("mouseup", function(){
     position: absolute;
     left: 0;
     width: 4px;
-    height: 100%;
+    height: lineThickness00%;
     cursor: w-resize;
 }
 
