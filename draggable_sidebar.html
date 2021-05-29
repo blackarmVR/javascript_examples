@@ -1,0 +1,167 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+        <style>
+            #alpha {
+                position: absolute;
+                background-color: rgb(245, 245, 245);
+            }
+            #bravo {
+                position: absolute;
+                overflow: scroll; 
+            }
+            #resizeHorizontal {
+                position: absolute;
+                background-color: rgb(230, 230, 230);
+                cursor: ew-resize;
+            }
+            H3 {
+                display: inline;
+            }
+            p{
+                display: inline;
+            }
+            #scale {
+                width: 60px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="top">
+            <h3 id="roomName">Datacenter</h3>
+            <label for="speed">Speed :</label>
+            <input type="number" id="speed" value="6" min="1" step="1">
+            <label for="hardwareOverlay">Hardware: </label>
+            <select id="hardwareOverlay">
+                <option value="default">Default</option>
+                <option value="showChanges">Show Change Requests</option>
+                <option value="showIncidents">Show Incidents</option>
+                <option value="audits">Audits</option>
+                <option value="endOfLife">End of life</option>
+            </select>
+            <label for="hardwareFilter">Support Group: </label>
+            <select id="hardwareFilter">
+                <option value="all">All</option>
+            </select>
+            <label for="rackOverlay">Rack: </label>
+            <select id="rackOverlay">
+                <option value="default">Default</option>
+                <option value="powerConsumeDesign">Power - Consume Design</option>
+                <option value="powerPoweriqDesign">Power - PowerIQ Design</option>
+                <option value="allocation">Slot allocation</option>
+            </select>
+            <label for="rackFilter">Environment: </label>
+            <select id="rackFilter">
+                <option value="all">All</option>
+            </select>
+            <p id="fps"></p>
+            <br>
+            <span id="changeRequest" style="display: none">
+                <label for="changeState" class="top">State:</label>
+                <select id="changeState" multiple="">
+                </select>
+                <label for="changeAssignmentGroup" class="top">Assignment Group:</label>
+                <select id="changeAssignmentGroup" multiple="">
+                </select>
+                <label for="changeCategory" class="top">Category:</label>
+                <select id="changeCategory" multiple="">
+                </select>
+                <label for="changeDates" class="top">UTC:</label>
+                <select id="changeDates" multiple="">
+                </select>
+                <button type="button" id="changeApplyFilter" class="btn btn-primary top" title="Apply Filter">Apply Filter</button>
+            </span>
+            <span id="incident" style="display: none">
+                <label for="incidentState" class="top">State:</label>
+                <select id="incidentState" multiple="">
+                </select>
+                <label for="incidentAssignmentGroup" class="top">Assignment Group:</label>
+                <select id="incidentAssignmentGroup" multiple="">
+                </select>
+                <label for="incidentCategory" class="top">Category:</label>
+                <select id="incidentCategory" multiple="">
+                </select>
+                <label for="incidentDates" class="top">UTC:</label>
+                <select id="incidentDates" multiple="">
+                </select>
+                <button type="button" id="incidentApplyFilter" class="btn btn-primary top" title="Apply Filter">Apply Filter</button>
+            </span>
+        </div>
+        <div id="alpha" style="left: 5px; top: 45px; width: 1569px; height: 557px;"></div>
+        <div id="bravo" style="left: 1588px; top: 45px; height: 557px; visibility: hidden; width: 87px;">
+            <input type="number" id="scale" value="100" min="1" step="10">
+            <svg height="2000" width="2000"></svg>
+        </div>
+        <div id="resizeHorizontal" style="left: 1579px; top: 45px; width: 4px; height: 557px;"></div>
+        <script>
+            
+    function pageDivDimensions() {
+        var divElement;
+        var topElement;
+        var topDivUnder;
+        var rect;
+        var width;
+        pageWidth = window.innerWidth;
+        pageHeight = window.innerHeight;
+        topElement = document.getElementById("top");
+        rect = topElement.getBoundingClientRect();
+        topDivUnder = rect.top + rect.height + border;
+        // alpha
+        divElement = document.getElementById("alpha");
+        divElement.style.left = border + "px";
+        divElement.style.top = topDivUnder + "px";
+        divElement.style.width = (pageWidth - sideBarWidth  - (lineThickness * 0.5) - (border * 2)) + "px";
+        divElement.style.height = (pageHeight - topDivUnder - (border * 2)) + "px";
+        // bravo
+        divElement = document.getElementById("bravo");
+        width = sideBarWidth - (border * 2) - (lineThickness * 0.5);
+        if (width < 0){
+            width = 0;
+        }
+        divElement.style.left = (pageWidth - sideBarWidth + border + (lineThickness * 0.5)) + "px";
+        divElement.style.top = topDivUnder + "px";
+        divElement.style.width = width + "px";
+        divElement.style.height = (pageHeight - topDivUnder - (border * 2)) + "px";
+        if (width < 16){
+            divElement.style.visibility = "hidden";
+        } else {
+            divElement.style.visibility = "visible";
+        }
+        // resizeHorizontal
+        divElement = document.getElementById("resizeHorizontal");
+        divElement.style.left = (pageWidth - sideBarWidth - (lineThickness * 0.5)) + "px";
+        divElement.style.left = pageWidth - sideBarWidth - (lineThickness * 0.5) + "px";
+        divElement.style.top = topDivUnder + "px";
+        divElement.style.width = lineThickness + "px";
+        divElement.style.height = (pageHeight - topDivUnder - (border * 2)) + "px";
+    }
+
+    function dragSetup(){
+        var dragHorizontal = document.getElementById("resizeHorizontal");
+        dragHorizontal.addEventListener("mousedown", function(e){
+            document.addEventListener("mousemove", resizeHorizontal, false);
+        }, false);
+        document.addEventListener("mouseup", function(){
+            document.removeEventListener("mousemove", resizeHorizontal, false);
+        }, false);
+    }
+
+    function resizeHorizontal(e){
+        sideBarWidth = window.innerWidth - e.x;
+        if (sideBarWidth < border + (lineThickness * 0.5)){
+            sideBarWidth = border + (lineThickness * 0.5);
+        }
+        pageDivDimensions();
+    }
+
+    var border = 5;
+    var lineThickness = 4;
+    var sideBarWidth = border + (lineThickness * 0.5);
+    //sideBarWidth = 100;
+    dragSetup();
+    window.addEventListener("resize", pageDivDimensions);
+    pageDivDimensions();
+
+        </script>
+    
+</body></html>

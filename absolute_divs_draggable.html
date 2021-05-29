@@ -12,6 +12,7 @@
             #bravo {
                 position: absolute;
                 background-color: rgb(245, 245, 245);
+                overflow: scroll;
             }
             #resizeHorizontal {
                 position: absolute;
@@ -28,11 +29,13 @@
     <body>
         <div id="top"></div>
         <div id="alpha"></div>
-        <div id="bravo"></div>
+        <div id="bravo">
+            <svg width="2000" height="2000"></svg>
+        </div>
         <div id="resizeHorizontal"></div>
         <div id="resizeVertical"></div>
         <script>
-            
+
     function pageDivDimensions() {
         var divElement;
         var border = 5;
