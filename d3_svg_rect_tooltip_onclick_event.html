@@ -2,7 +2,7 @@
     <head>
         <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
         <meta content="utf-8" http-equiv="encoding">
-        <script src="./dependencies/d3.min.js"></script>
+        <script src="https://d3js.org/d3.v6.js"></script>
         <style>
         </style>
     </head>
@@ -13,30 +13,34 @@
 
         var svgElement;
         var idName;
-        svgCanvas = d3.select("#canvas");
+        var x;
         for (var loop = 0; loop < 10; loop += 1){
-            idName = "123box_" + (loop + 1).toString();
-            svgElement = svgCanvas.append("rect")
-            .attr("x", (100 + (loop * 110)))
+            x = 100 + (loop * 110);
+            idName = "box_" + (loop + 1).toString();
+            // create basic rectangle
+            svgElement = rectangle(x, idName)
+            // add mouseover
+            svgElement.append("svg:title").text(idName);
+            // add event listener
+            svgElement.on("click", beep);
+        }
+
+        function rectangle(x,id){
+            var svgCanvas = d3.select("#canvas");
+            var svgElement = svgCanvas.append("rect")
+            .attr("x", x)
             .attr("y", 100)
             .attr("width", 100)
             .attr("height", 100)
             .attr("id", idName)
             .style("fill", "red");
-            // add mouseover
-            svgElement
-			.append("svg:title")
-			.text(idName);
-            // add event listener
-            svgElement
-            .on("click", beep);
+            return svgElement;
         }
 
         function beep(mouseEvent){
             var svgCanvas = document.getElementById('canvas');
             var canvasRect = svgCanvas.getBoundingClientRect();
             var elem = document.elementFromPoint(mouseEvent.x, mouseEvent.y);
-            console.log(elem)
             document.getElementById("title").innerText = elem.id;
         }
 
