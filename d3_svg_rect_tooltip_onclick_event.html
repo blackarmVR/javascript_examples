@@ -7,43 +7,71 @@
         </style>
     </head>
     <body>
-        <h1 id="title">Click any box</h1>
         <svg id = "canvas" width = "1600" height = "1000" xPosmlns = "http://www.w3.org/2000/svg"></svg>
         <script>
 
-        var idName;
-        var loop;
-        var svgElement;
-        var xPos;
-        for (loop = 0; loop < 10; loop += 1){
-            xPos = 100 + (loop * 110);
-            idName = "box_" + loop.toString();
-            // create basic rectangle
-            svgElement = rectangle(xPos, idName)
-            // add mouseover
-            svgElement.append("svg:title").text(idName);
-            // add event listener
-            svgElement.on("click", beep);
+    var htmlElement;
+    var idName;
+    var loop;
+    var svgCanvas;
+    var svgElement;
+    var sysid;
+    var xPos;
+    svgCanvas = d3.select("#canvas");
+    for (loop = 0; loop < 10; loop += 1){
+        xPos = 100 + (loop * 110);
+        sysid = "testing_" + loop.toString();
+        // create basic rectangle
+        idName = "rect_" + loop.toString();
+        svgElement = svgCanvas.append("rect")
+        .attr("x", xPos)
+        .attr("y", 100)
+        .attr("width", 100)
+        .attr("height", 100)
+        .attr("id", idName)
+        .style("fill", "red");
+        // add mouseover
+        svgElement.append("svg:title").text(idName);
+        // make the cursor show that it is clickable
+        svgElement.style("cursor", "pointer"); 
+        // add event listener and store sysid in attribute
+        htmlElement = document.getElementById(idName);
+        if (htmlElement){
+            htmlElement.addEventListener("click", openPage, false);
+            htmlElement.setAttribute("sysid", sysid);
         }
+        // create text
+        idName = "text_" + loop.toString();
+        svgElement = svgCanvas.append("text")
+        .attr("x", xPos + 50)
+        .attr("y", 170)
+        .attr("id", idName)
+        .style("fill", "black")
+        .style("font-size", 40)
+        .style("font-weight", 300)
+        .style("text-anchor", "middle")
+        .text(loop);
+        // add mouseover
+        svgElement.append("svg:title").text(idName);
+        // make the cursor show that it is clickable
+        svgElement.style("cursor", "pointer"); 
+        // add event listener and store sysid in attribute
+        htmlElement = document.getElementById(idName);
+        if (htmlElement){
+            htmlElement.addEventListener("click", openPage, false);
+            htmlElement.setAttribute("sysid", sysid);
+        }
+    }
 
-        function rectangle(xPos,id){
-            var svgCanvas = d3.select("#canvas");
-            var svgElement = svgCanvas.append("rect")
-            .attr("x", xPos)
-            .attr("y", 100)
-            .attr("width", 100)
-            .attr("height", 100)
-            .attr("id", idName)
-            .style("fill", "red");
-            return svgElement;
+    function openPage(mouseEvent){
+        var elem;
+        var sysid;
+        elem = document.elementFromPoint(mouseEvent.x, mouseEvent.y);
+        sysid = elem.getAttribute("sysid");
+        if (sysid){
+            window.open("nav_to.do?uri=%2Falm_hardware.do%3Fsys_id%3D" + sysid);
         }
-
-        function beep(mouseEvent){
-            var svgCanvas = document.getElementById('canvas');
-            var canvasRect = svgCanvas.getBoundingClientRect();
-            var elem = document.elementFromPoint(mouseEvent.x, mouseEvent.y);
-            document.getElementById("title").innerText = elem.id;
-        }
+    }
 
         </script>
     </body>
