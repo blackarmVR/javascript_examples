@@ -24,6 +24,18 @@
             #scale {
                 width: 60px;
             }
+            .button {
+                background-color: #4CAF50;
+                border: none;
+                color: white;
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+            }
         </style>
     </head>
     <body>
@@ -87,12 +99,15 @@
                 <button type="button" id="incidentApplyFilter" class="btn btn-primary top" title="Apply Filter">Apply Filter</button>
             </span>
         </div>
-        <div id="alpha" style="left: 5px; top: 45px; width: 1569px; height: 557px;"></div>
+        <div id="alpha" style="left: 5px; top: 45px; width: 1569px; height: 557px;">
+            <button type="button" id="showRack" class="button">Show Rack</button>
+        </div>
         <div id="bravo" style="left: 1588px; top: 45px; height: 557px; visibility: hidden; width: 87px;">
+            <svg id="canvas" height="2000" width="2000"></svg>
             <input type="number" id="scale" value="100" min="1" step="10">
-            <svg height="2000" width="2000"></svg>
         </div>
         <div id="resizeHorizontal" style="left: 1579px; top: 45px; width: 4px; height: 557px;"></div>
+        <script src="http://d3js.org/d3.v5.min.js"></script>
         <script>
             
     function pageDivDimensions() {
@@ -151,15 +166,233 @@
         if (sideBarWidth < border + (lineThickness * 0.5)){
             sideBarWidth = border + (lineThickness * 0.5);
         }
+        window.getSelection().removeAllRanges();
         pageDivDimensions();
     }
 
-    var border = 5;
+
+
+
+
+
+    /**
+     * @function pagePrepareCanvas
+     * @description clears the svg canvas
+     */
+     function pagePrepareCanvas() {
+        var height;
+        var width;
+    }
+
+
+    function drawRack(){
+        var rackHeight;
+        var rackWidth;
+        var canvasHeight;
+        var canvasWidth;
+        var height;
+        var width;
+        var unitHeight = 0.2;
+        var rackBorder = 0.02;
+        ////////////////////////////////////////////////////////////
+        var rackName = "test_01_05";
+        var rackSysid = "abcdefghijk";
+        var scale = 100;
+        var rackUnits = 32;
+        ////////////////////////////////////////////////////////////
+        var dimensions = {
+            "rackBorder": rackBorder * scale,
+            "unitHeight": unitHeight * scale,
+            "rackWidth": ((unitHeight * 20) + (rackBorder * 4)) * scale,
+            "rackHeight": ((rackUnits * unitHeight) + rackBorder) * scale,
+            "canvasHeight": (rackUnits + 2.5) * unitHeight * scale,
+            "countFontSize": 0.16 * scale,
+            "countFontWeight": 300 * scale,
+            "flagFontSize": 0.08 * scale,
+            "flagFontWeight": 300 * scale,
+            "rackNameFontSize": 0.3 * scale,
+            "rackNameFontWeight": 300 * scale,
+            "roomNameFontSize": 0.24 * scale,
+            "roomNameFontWeight": 300 * scale,
+            "rackNameY": 0.3 * scale,
+            "serverFontSize": 0.14 * scale,
+            "serverFontWeight": 300 * scale,
+            "sledFontSize": 0.14 * scale,
+            "sledFontWeight": 300 * scale,
+            "xStart": 0,
+            "yStart": unitHeight * 2 * scale
+        };
+        var saturation = 0.4;
+        var colors = {
+            "green": { "red": saturation, "green": 1, "blue": saturation },
+            "red": { "red": 1, "green": saturation, "blue": saturation },
+            "colorYellow": { "red": 1, "green": 1, "blue": saturation },
+            "emptySlot": { "red": 0.6, "green": 0.6, "blue": 0.6 },
+            "server": { "red": 0.8, "green": 0.8, "blue": 0.8 },
+            "white": { "red": 1, "green": 1, "blue": 1 },
+            "black": { "red": 0, "green": 0, "blue": 0 },
+            "ciMissing": { "red": 0.5, "green": 0.5, "blue": 0.5 }
+        };
+        sideBarWidth = dimensions["rackWidth"] + 35;
+        pageDivDimensions();
+        pageCanvasPrepare(dimensions);
+        pageRackName(rackName, rackSysid, dimensions);
+        pageRackBackground(dimensions);
+        pageRackUnits(rackName, rackUnits, dimensions);
+        //pageRackEmptyUnits(rackName, xStart, yStart);
+    }
+    function pageCanvasPrepare(dimensions){
+        var svgCanvas = document.getElementById("canvas");
+        d3.select("#canvas").attr("height", dimensions["canvasHeight"]).attr("width", dimensions["rackWidth"]);
+        if (svgCanvas) {
+            while (svgCanvas.firstChild) {
+                svgCanvas.removeChild(svgCanvas.firstChild);
+            }
+        }
+    }
+    function pageRackName(rackName, rackSysid, dimensions) {
+        var svgTextObject;
+        svgTextObject = {
+            align: "middle",
+            class: "",
+            color: { "red": 0, "green": 0, "blue": 0 },
+            fontsize: dimensions["rackNameFontSize"],
+            fontweight: dimensions["rackNameFontWeight"],
+            text: rackName,
+            x: dimensions["rackWidth"] * 0.5,
+            y: dimensions["rackNameY"]
+        };
+        svgText(svgTextObject);
+    }
+    function pageRackBackground(dimensions) {
+        var svgRectangleObject;
+        svgRectangleObject = {
+            class: "",
+            fillColor: "black",
+            height: dimensions["rackHeight"],
+            mouseover: "",
+            onclick: "",
+            strokeColor: { "red": 0, "green": 0, "blue": 0 },
+            strokeWidth: 0,
+            url: "",
+            width: dimensions["rackWidth"],
+            x: dimensions["xStart"],
+            y: dimensions["yStart"]
+        };
+        svgRectangle(svgRectangleObject);
+    }
+    function pageRackUnits(rackName, rackUnits, dimensions) {
+        var svgRectangleObject;
+        var svgTextObject;
+        var unitLoop;
+        var x;
+        var y;
+        for (unitLoop = 0; unitLoop < rackUnits; unitLoop++) {
+            y = dimensions["yStart"] + ((rackUnits - unitLoop - 1) * dimensions["unitHeight"]) + dimensions["rackBorder"];
+            svgRectangleObject = {
+                fillColor: { "red": 1, "green": 1, "blue": 1 },
+                height: (dimensions["unitHeight"] - dimensions["rackBorder"]),
+                strokeColor: { "red": 1, "green": 1, "blue": 1 },
+                strokeWidth: 0,
+                width: dimensions["unitHeight"],
+                x: dimensions["xStart"] + dimensions["rackBorder"],
+                y: y
+            };
+            svgRectangle(svgRectangleObject);
+            svgRectangleObject = {
+                fillColor: { "red": 1, "green": 1, "blue": 1 },
+                height: (dimensions["unitHeight"] - dimensions["rackBorder"]),
+                strokeColor: { "red": 1, "green": 1, "blue": 1 },
+                strokeWidth: 0,
+                width: dimensions["rackWidth"] - (dimensions["unitHeight"] + (dimensions["rackBorder"] * 3)),
+                x: dimensions["xStart"] + dimensions["unitHeight"] + (dimensions["rackBorder"] * 2),
+                y: y
+            };
+            svgRectangle(svgRectangleObject);
+            svgTextObject = {
+                align: "middle",
+                class: "",
+                color: { "red": 0, "green": 0, "blue": 0 },
+                fontsize: dimensions["countFontSize"],
+                fontweight: dimensions["countFontWeight"],
+                mouseover: "",
+                onclick: "",
+                text: (unitLoop + 1).toString(),
+                url: "",
+                x: dimensions["xStart"] + dimensions["rackBorder"] + (dimensions["unitHeight"] * 0.5),
+                y: y + (dimensions["unitHeight"] * +0.75)
+            };
+            svgText(svgTextObject);
+        }
+    }
+    function pageRackEmptyUnits(rackName, xStart, yStart) {
+        var svgRectangleObject;
+        var unitLoop;
+        if (scale) {
+            for (unitLoop = 0; unitLoop < roomRowRackData[rackName]["rack_units"]; unitLoop++) {
+                svgRectangleObject = {
+                    class: "",
+                    fillColor: colors["white"],
+                    height: dimensions["unitHeight"] - dimensions["rackBorder"],
+                    mouseover: "Empty rack unit",
+                    onclick: "",
+                    scale: 1,
+                    strokeColor: colors["white"],
+                    strokeWidth: 0,
+                    url: "",
+                    width: dimensions["rackWidth"] - dimensions["unitHeight"] - (dimensions["rackBorder"] * 3),
+                    x: xStart + (dimensions["rackBorder"] * 2) + dimensions["unitHeight"],
+                    y: yStart + (roomRowRackData[rackName]["rack_units"] + 3 - unitLoop) * dimensions["unitHeight"]
+                };
+                svgRectangle(svgRectangleObject);
+            }
+        }
+    }
+    function svgText(svgTextObject) {
+        console.log("svgTextObject", svgTextObject);
+        var svgCanvas;
+        var svgElement;
+        svgCanvas = d3.select("#canvas");
+        svgElement = svgCanvas.append("text")
+            .attr("class", svgTextObject["class"])
+            .style("cursor", "pointer")
+            .attr("x", svgTextObject["x"])
+            .attr("y", svgTextObject["y"])
+            .style("fill", colorObjectToString(svgTextObject["color"]))
+            .style("font-size", svgTextObject["fontsize"] + "px")
+            .style("font-weight", svgTextObject["fontweight"])
+            .style("text-anchor", svgTextObject["align"])
+            .text(svgTextObject["text"]);
+        return svgElement;
+    }
+    function svgRectangle(svgRectangleObject) {
+        console.log("svgRectangleObject", svgRectangleObject);
+        var errorMessage;
+        var svgCanvas;
+        var svgElement;
+        svgCanvas = d3.select("#canvas");
+        svgElement = svgCanvas.append("rect")
+            .attr("x", svgRectangleObject["x"])
+            .attr("y", svgRectangleObject["y"])
+            .attr("width", svgRectangleObject["width"])
+            .attr("height", svgRectangleObject["height"])
+            .style("fill", colorObjectToString(svgRectangleObject["fillColor"]))
+            .style("stroke", colorObjectToString(svgRectangleObject["strokeColor"]))
+            .style("stroke-width", svgRectangleObject["strokeWidth"]);
+        return svgElement;
+    }
+    function colorObjectToString(colorObject) {
+        var colorString;
+        colorString = "rgb(" + (colorObject["red"] * 255) + "," + (colorObject["green"] * 255) + "," + (colorObject["blue"] * 255) + ")";
+        return (colorString);
+    }
+
+    var border = 8;
     var lineThickness = 4;
     var sideBarWidth = border + (lineThickness * 0.5);
-    //sideBarWidth = 100;
     dragSetup();
     window.addEventListener("resize", pageDivDimensions);
+    document.getElementById("showRack").addEventListener("click", drawRack, false);
     pageDivDimensions();
 
         </script>

@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+        <meta content="utf-8" http-equiv="encoding">
+        <script src="./dependencies/d3.min.js"></script>
+        <style>
+        </style>
+    </head>
+    <body>
+        <h1 id="title">Click any box</h1>
+        <svg id = "canvas" width = "1600" height = "1000" xmlns = "http://www.w3.org/2000/svg"></svg>
+        <script>
+
+        var svgElement;
+        var idName;
+        svgCanvas = d3.select("#canvas");
+        for (var loop = 0; loop < 10; loop += 1){
+            idName = "123box_" + (loop + 1).toString();
+            svgElement = svgCanvas.append("rect")
+            .attr("x", (100 + (loop * 110)))
+            .attr("y", 100)
+            .attr("width", 100)
+            .attr("height", 100)
+            .attr("id", idName)
+            .style("fill", "red");
+            // add mouseover
+            svgElement
+			.append("svg:title")
+			.text(idName);
+            // add event listener
+            svgElement
+            .on("click", beep);
+        }
+
+        function beep(mouseEvent){
+            var svgCanvas = document.getElementById('canvas');
+            var canvasRect = svgCanvas.getBoundingClientRect();
+            var elem = document.elementFromPoint(mouseEvent.x, mouseEvent.y);
+            console.log(elem)
+            document.getElementById("title").innerText = elem.id;
+        }
+
+        </script>
+    </body>
+</html>
