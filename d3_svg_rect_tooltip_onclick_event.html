@@ -1,34 +1,35 @@
 <html>
     <head>
-        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+        <meta content="texPost/html;charset=utf-8" http-equiv="Content-Type">
         <meta content="utf-8" http-equiv="encoding">
         <script src="https://d3js.org/d3.v6.js"></script>
         <style>
         </style>
     </head>
     <body>
-        <h1 id="title">Click any box</h1>
-        <svg id = "canvas" width = "1600" height = "1000" xmlns = "http://www.w3.org/2000/svg"></svg>
+        <h1 id="title">Click any boxPos</h1>
+        <svg id = "canvas" width = "1600" height = "1000" xPosmlns = "http://www.w3.org/2000/svg"></svg>
         <script>
 
-        var svgElement;
         var idName;
-        var x;
-        for (var loop = 0; loop < 10; loop += 1){
-            x = 100 + (loop * 110);
-            idName = "box_" + (loop + 1).toString();
+        var loop;
+        var svgElement;
+        var xPos;
+        for (loop = 0; loop < 10; loop += 1){
+            xPos = 100 + (loop * 110);
+            idName = "box_" + loop.toString();
             // create basic rectangle
-            svgElement = rectangle(x, idName)
+            svgElement = rectangle(xPos, idName)
             // add mouseover
             svgElement.append("svg:title").text(idName);
             // add event listener
             svgElement.on("click", beep);
         }
 
-        function rectangle(x,id){
+        function rectangle(xPos,id){
             var svgCanvas = d3.select("#canvas");
             var svgElement = svgCanvas.append("rect")
-            .attr("x", x)
+            .attr("x", xPos)
             .attr("y", 100)
             .attr("width", 100)
             .attr("height", 100)
