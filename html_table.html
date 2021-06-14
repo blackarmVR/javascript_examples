@@ -20,19 +20,20 @@ th {
 		</style>
 	</head>
 	<body>
-		<div id="target">
-	 	</div>
+		<div id="target"></div>
+        <div id="sortable"></div>
 		<script>
 
 	var dataHeader = ["header1","header2","header3"];
 	var dataContent = [
-		["alpha1","alpha2","alpha3"],
-		["bravo1","bravo2","bravo3"]
+		["alpha1","bravo2","alpha3"],
+		["bravo1","alpha2","bravo3"]
 	];
 
-	createTable("target",dataHeader,dataContent);
+	createTable("target",dataHeader,dataContent,false);
+	createTable("sortable",dataHeader,dataContent,true);
 
-	function createTable(divName,dataHeader,dataContent){
+	function createTable(divName,dataHeader,dataContent,sortable){
 		var table, thead, row, th, text, cell;
 		var div = document.getElementById(divName);
 		var child;
@@ -44,17 +45,23 @@ th {
 		}
 		// headings
 		table = document.createElement('table');
+        if (sortable){
+            table.classList.add('searchable');
+            table.classList.add('sortable');
+        }
 		thead = table.createTHead();
 		row = thead.insertRow();
 		dataHeader.forEach(function(header){
-			th = document.createElement("th");
+            th = document.createElement("th");
+            th.classList.add('header');
 			text = document.createTextNode(header);
 			th.appendChild(text);
 			row.appendChild(th);
 		});
 		// content
+        tbody = document.createElement("tbody");
 		dataContent.forEach(function(rowContent){
-			row = table.insertRow();
+			row = tbody.insertRow();
 			rowContent.forEach(function(cellData){
 				cell = row.insertCell();
 				text = document.createTextNode(cellData);
@@ -62,6 +69,7 @@ th {
 				row.appendChild(cell);
 			});
 		})
+		table.appendChild(tbody);
 		div.appendChild(table);
 	}
 
